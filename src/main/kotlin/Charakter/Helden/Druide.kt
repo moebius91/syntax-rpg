@@ -100,7 +100,7 @@ class Druide(name: String): Held(name) {
     override fun menue(gegner: Gegner, heldenliste: List<Held>): Boolean {
         val held: Druide = this
         druideMenueAusgabe(held)
-        val eingabe = sichereEingabe(6)
+        val eingabe = sichereEingabe(7)
         return when(eingabe) {
             1 -> {
                 held.angreifen(gegner)

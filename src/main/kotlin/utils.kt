@@ -196,10 +196,10 @@ fun buffsDebuffsEntfernen(heldenliste: List<Held>) {
 
 fun lebenspunkteAusgabe(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
     for (gegner in gegnerliste) {
-        println("${gegner.name}: ${gegner.lebenspunkte()}")
+        println("${gegner.name}: ${gegner.lebenspunkte()}/${gegner.maxLebenspunkte()}")
     }
     for (held in heldenliste) {
-        println("${held.name}: ${held.lebenspunkte()}")
+        println("${held.name}: ${held.lebenspunkte()}/${held.maxLebenspunkte()}")
     }
 }
 
@@ -296,15 +296,31 @@ fun toteSchwaermerEntfernen(gegnerliste: MutableList<Gegner>) {
  */
 
 fun heldenzug(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
-    val gegner: Gegner = gegnerliste.random()
+    //val gegner: Gegner = gegnerliste.random()
 
     for (held in heldenliste) {
         buffsDebuffsAnwenden(held)
 
+        val gegner: Gegner = gegnerAuswahl(held, gegnerliste)
         var bedingung: Boolean = false
         while(!bedingung && held.lebenspunkte() > 0 && gegnerliste[0].lebenspunkte() > 0) {
             bedingung = charakterMenue(held,gegner,heldenliste)
         }
+    }
+}
+
+fun gegnerAuswahl(held: Held, gegnerliste: MutableList<Gegner>): Gegner {
+    return if (gegnerliste.size == 1) {
+        gegnerliste[0]
+    } else {
+        println("${held.name}, welchen Gegner willst Du in der nächsten Runde angreifen?")
+        var zaehler: Int = 0
+        for (gegner in gegnerliste) {
+            zaehler++
+            println("$zaehler. ${gegner.name}")
+        }
+        val eingabe: Int = sichereEingabe(zaehler) -1
+        gegnerliste[eingabe]
     }
 }
 
@@ -447,6 +463,21 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                 },
                 {
                     gegner.feueratem(heldenliste)
+                },
+                {
+                    val kriegerliste: MutableList<Krieger> = mutableListOf()
+                    for (held in heldenliste) {
+                        if (held is Krieger) {
+                            kriegerliste.add(held)
+                        }
+                    }
+                    if (kriegerliste.isNotEmpty()) {
+                        val krieger: Krieger = kriegerliste.random()
+                        if (krieger.schildVorhanden) {
+                            gegner.schildEntreissen(krieger)
+                            println("${gegner.name} entreißt ${krieger.name} sein Schild!")
+                        }
+                    }
                 }
             ).random()
         }
@@ -490,26 +521,16 @@ fun spielrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
 
     while (drache.lebenspunkte() > 0 && (held1.lebenspunkte() > 0 || held2.lebenspunkte() > 0 || held3.lebenspunkte() > 0)) {
         kampfrunde(heldenliste, gegnerliste)
-        if (drache.lebenspunkte() < 0) {
+        if (drache.lebenspunkte() <= 0) {
             drache.lebenspunkteSetzen(0)
             if (gegnerliste.size == 2) gegnerliste[1].lebenspunkteSetzen(0)
             println("Der Drache wurde besiegt!")
+            lebenspunkteAusgabe(gegnerliste, heldenliste)
             break
         }
-        if (held1.lebenspunkte() < 0) {
-            held1.lebenspunkteSetzen(0)
-            println("${held1.name} ist gestorben")
-        } else if (held2.lebenspunkte() < 0) {
-            held2.lebenspunkteSetzen(0)
-            println("${held2.name} ist gestorben")
-        } else if (held3.lebenspunkte() < 0) {
-            held3.lebenspunkteSetzen(0)
-            println("${held3.name} ist gestorben")
-        }
 
-        if (held1.lebenspunkte() < 0) held1.lebenspunkteSetzen(0)
-        if (held2.lebenspunkte() < 0) held2.lebenspunkteSetzen(0)
-        if (held3.lebenspunkte() < 0) held3.lebenspunkteSetzen(0)
+        ueberpruefeHeldGestorben(heldenliste)
+
         if (held1.lebenspunkte() == 0 && held2.lebenspunkte() == 0 && held3.lebenspunkte() == 0) {
             println("Der Drache hat alle Helden besiegt.")
             break
@@ -517,4 +538,24 @@ fun spielrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
 
         lebenspunkteAusgabe(gegnerliste, heldenliste)
     }
+}
+
+fun ueberpruefeHeldGestorben(heldenliste: List<Held>) {
+    for (held in heldenliste) {
+        if (held.lebenspunkte() <= 0) {
+            held.lebenspunkteSetzen(0)
+            println("${held.name} ist gestorben.")
+        }
+    }
+}
+
+/**
+ * Eine kurze Begrüßung und Instruktion über das Spiel
+ */
+fun spielBegruessung() {
+    print("Hallo und herzlich Willkommen bei Golden Syntax!\r")
+    Thread.sleep(2000)
+    print("Auf Dich wartet eine spannende Reise.\r")
+    Thread.sleep(2000)
+    println("Stelle Deine Heldengruppe zusammen!")
 }

@@ -6,14 +6,13 @@ fun main() {
     val held1: Krieger = Krieger("Krieger")
     val held2: Druide = Druide("Druide")
     val held3: Magier = Magier("Magier")
-    val drache: Drache = Drache()
 
     // Verpacken der Charaktere in jeweilige Listen
     val heldenliste: List<Held> = listOf(held1, held2, held3)
-    val gegnerliste: MutableList<Gegner> = mutableListOf(drache)
+    val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
 
     // Inventar für die Helden anlegen
-    for (held in heldenliste) inventarAnlegen(held)
+    heldenteamInventareAnlegen(heldenliste)
 
     spielrunde(heldenliste,gegnerliste)
     readln()

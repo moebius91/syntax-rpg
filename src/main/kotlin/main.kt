@@ -2,6 +2,9 @@ import Charakter.Gegner.*
 import Charakter.Helden.*
 
 fun main() {
+    // Spielbegrüßung
+    spielBegruessung()
+
     // Instanziiert die Heldengruppe
     // Der Spieler hat freie Auswahl über gewählte Klassen und Namen.
     // Inklusive anlegen des Inventars für jeden Helden.

@@ -16,7 +16,7 @@ open class Charakter {
     open var ausdauer: Int = (10..20).random()
     open var intelligenz: Int = (10..20).random()
 
-    // Buff- und Debuffmap
+    // Buff- und Debuffliste
     val buffs: MutableList<Buff> = mutableListOf()
     val debuffs: MutableList<Debuff> = mutableListOf()
 
