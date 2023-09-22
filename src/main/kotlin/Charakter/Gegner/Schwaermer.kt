@@ -9,6 +9,7 @@ class Schwaermer: Drache() {
     override var maxlp: Int = lp
 
     override fun feueratem(heldenliste: List<Held>) {
+        println("Der Feueratem des kleinen Drachen trifft alle Helden!")
         val schaden: Int = (25..50).random()  / 3
         for (held in heldenliste) {
             held.schadenNehmen(schaden)

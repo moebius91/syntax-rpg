@@ -296,9 +296,9 @@ fun toteSchwaermerEntfernen(gegnerliste: MutableList<Gegner>) {
  */
 
 fun heldenzug(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
-    //val gegner: Gegner = gegnerliste.random()
-
     for (held in heldenliste) {
+        // Überprüft ob der Endgegner gefallen ist und beendet den Heldenzug
+        if (gegnerliste[0].lebenspunkte() <= 0) break
         buffsDebuffsAnwenden(held)
 
         val gegner: Gegner = gegnerAuswahl(held, gegnerliste)
@@ -415,7 +415,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
     // Iteriert durch die Liste der Gegner.
     for (gegner in gegnerliste) {
         // Sorgt dafür, daß der Drache seine Aktionen ausführen kann
-        if (gegner is Drache && gegner !is Schwaermer) {
+        if (gegner is Drache && gegner !is Schwaermer && gegner.lebenspunkte() > 0) {
             // Wählt die Attacke des Endgegners
             when (zufallszahl) {
                 1 -> {
@@ -450,7 +450,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     gegner.heilen()
                 }
             }       // Wählt den Unterboss aus
-        } else if (gegner is Schwaermer && !schwaermerGefressen) {
+        } else if (gegner is Schwaermer && !schwaermerGefressen && gegner.lebenspunkte() > 0) {
             // Wählt aus einer Liste eine zufällige Aktion und führt sie aus.
             listOf(
                 {
@@ -476,7 +476,13 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                         if (krieger.schildVorhanden) {
                             gegner.schildEntreissen(krieger)
                             println("${gegner.name} entreißt ${krieger.name} sein Schild!")
+                        } else {
+                            println("${gegner.name} hat versucht ${krieger.name} sein Schild zu entreißen!")
+                            println("${krieger.name} hat aber kein Schild..")
                         }
+                    } else {
+                        println("${gegner.name} sucht nach einem Krieger um ihn sein Schild zu entreißen.")
+                        println("Es gibt keine Krieger in der Heldengruppe.")
                     }
                 }
             ).random()

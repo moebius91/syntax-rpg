@@ -7,8 +7,8 @@ fun main() {
 
     // Instanziiert die Heldengruppe
     // Der Spieler hat freie Auswahl über gewählte Klassen und Namen.
-    // Inklusive anlegen des Inventars für jeden Helden.
     val heldenliste: List<Held> = heldenteamInstanziieren()
+    // Anlegen der Heldeninventare
     heldenteamInventareAnlegen(heldenliste)
 
     // Instanziiert den Endgegner
