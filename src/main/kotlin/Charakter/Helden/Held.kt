@@ -24,16 +24,18 @@ open class Held(override var name:String): Charakter() {
     var waffenTyp: Waffe = Waffe("Unbewaffnet")
     val inventar: MutableList<Item> = mutableListOf()
 
-    open fun angreifen(gegner: Gegner) {
+    open fun angreifen(gegner: Gegner): Boolean {
         println("${this.name} holt zum Angriff aus!")
         Thread.sleep(1000)
         var maxSchaden: Int = staerke
         var schaden: Int = (0..maxSchaden).random()
         ausgabeSchaden(this,schaden, maxSchaden, gegner)
+        return true
     }
 
-    open fun verteidigen() {
+    open fun verteidigen(): Boolean {
         println("${this.name} reißt sich seine Arme vors Gesicht.")
+        return true
     }
 
     fun itemBenutzen(): Boolean {
@@ -54,7 +56,7 @@ open class Held(override var name:String): Charakter() {
         }
     }
 
-    fun statusAnzeigen() {
+    fun statusAnzeigen(): Boolean {
         println("${this.name} hat noch ${this.lp} Lebenspunkte.")
         println("Folgende Items befinden sich im Inventar:")
         if (!inventar.isEmpty()) {
@@ -64,6 +66,7 @@ open class Held(override var name:String): Charakter() {
         } else {
             println("Dein Inventar ist leer.")
         }
+        return false
     }
 
     open fun waehleWaffe() {
@@ -79,5 +82,9 @@ open class Held(override var name:String): Charakter() {
         waffenTyp.ablegen(this)
         waffenTyp = Waffe("Unbewaffnet")
         waffenTyp.anlegen(this)
+    }
+
+    open fun menue(gegner: Gegner, heldenliste: List<Held>): Boolean {
+        return false
     }
 }

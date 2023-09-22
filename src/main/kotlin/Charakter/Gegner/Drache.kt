@@ -25,7 +25,7 @@ open class Drache: Gegner() {
                 }
             }
 
-            if (!schildGebrauch) held.lp -= schaden
+            if (!schildGebrauch) held.schadenNehmen(schaden)
         }
     }
 
@@ -39,6 +39,12 @@ open class Drache: Gegner() {
     fun schwaermerBeschwoeren(gegnerliste: MutableList<Gegner>): Schwaermer {
         println("Ein Schwärmer wird beschworen!")
         return Schwaermer()
+    }
+
+    open fun schwaermerFressen(schwaermer: Schwaermer) {
+        println("${this.name} frisst ${schwaermer.name}.")
+        println("${this.name} erhöht seine maximalen LP von ${this.maxlp} auf ${(this.maxlp*1.5).toInt()}")
+        this.maxlp = (this.maxlp*1.5).toInt()
     }
 
     fun heilen(){

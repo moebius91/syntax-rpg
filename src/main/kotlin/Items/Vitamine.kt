@@ -3,6 +3,7 @@ package Items
 import Charakter.Helden.Held
 
 class Vitamine: Item("Vitamine") {
+    override var beschreibung: String = "Vitamine: Sie erhöhen Deine gesamten Werte um 10%."
     override fun benutzen(held: Held): Boolean{
         held.staerke += held.staerke /10
         held.intelligenz += held.intelligenz /10
@@ -11,6 +12,6 @@ class Vitamine: Item("Vitamine") {
     }
 
     override fun beschreibungAnzeigen() {
-        println("Vitamine: Sie erhöhen Deine gesamten Werte um 10%.")
+        println(beschreibung)
     }
 }

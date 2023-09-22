@@ -1,9 +1,6 @@
 import Charakter.Charakter
-import Charakter.Gegner.Gegner
-import Charakter.Helden.Druide
-import Charakter.Helden.Held
-import Charakter.Helden.Krieger
-import Charakter.Helden.Magier
+import Charakter.Gegner.*
+import Charakter.Helden.*
 import Items.Heiltrank
 import Items.Vitamine
 import StatusEffekte.Buffs.Buff
@@ -30,15 +27,15 @@ fun ausgabeSchaden(angreifer: Charakter, schaden: Int, maxSchaden:Int, gegner: C
             println("${angreifer.name} hat nicht getroffen..")
         }
         in 1.. zahl1 -> {
-            gegner.lp -= schaden
+            gegner.schadenNehmen(schaden)
             println("${angreifer.name} hat geringen Schaden verursacht.. ($schaden)")
         }
         in 11 .. zahl2 -> {
-            gegner.lp -= schaden
+            gegner.schadenNehmen(schaden)
             println("${angreifer.name} hat Schaden verursacht. ($schaden)")
         }
         else -> {
-            gegner.lp -= schaden
+            gegner.schadenNehmen(schaden)
             println("${angreifer.name} hat großen Schaden verursacht! ($schaden)")
         }
     }
@@ -51,117 +48,23 @@ fun inventarAnlegen(held: Held) {
     held.inventar.add(Vitamine())
 }
 
+fun heldenInventareAnlegen(heldenliste: List<Held>) {
+    for (held in heldenliste) inventarAnlegen(held)
+}
+
 fun charakterMenue(held: Held, gegner: Gegner, heldenliste: List<Held>): Boolean {
     if (held.waffenTyp.name == "Unbewaffnet") {
         held.waehleWaffe()
     }
     if (held is Krieger) {
-        return kriegerMenue(held, gegner)
+        return held.menue(gegner, heldenliste)
     } else if (held is Magier) {
-        return magierMenue(held, gegner, heldenliste)
+        return held.menue(gegner, heldenliste)
     } else if (held is Druide) {
-        return druideMenue(held,gegner, heldenliste)
+        return held.menue(gegner, heldenliste)
     }
 
     return false
-}
-
-fun kriegerMenue(held: Krieger, gegner: Gegner): Boolean {
-    println("${held.name}: Wähle Deine Aktion:")
-    println("1. Angreifen")
-    println("2. Verteidigen")
-    println("3. Status anzeigen")
-    println("4. Item benutzen")
-    val eingabe = sichereEingabe(4)
-    return when(eingabe) {
-        1 -> {
-            held.angreifen(gegner)
-            true
-        }
-        2 -> {
-            held.verteidigen()
-            true
-        }
-        3 -> {
-            held.statusAnzeigen()
-            false
-        }
-        else -> {
-            held.itemBenutzen()
-        }
-    }
-}
-
-fun magierMenue(held: Magier, gegner: Gegner, heldenliste: List<Held>): Boolean {
-    println("${held.name}: Wähle Deine Aktion:")
-    println("1. Angreifen")
-    println("2. Zauberangriff")
-    println("3. Verteidigen")
-    println("4. Entfluchen")
-    println("5. Status anzeigen")
-    println("6. Item benutzen")
-    val eingabe = sichereEingabe(6)
-    return when(eingabe) {
-        1 -> {
-            held.angreifen(gegner)
-            true
-        }
-        2 -> {
-            held.zaubern(gegner)
-            true
-        }
-        3 -> {
-            held.verteidigen()
-            true
-        }
-        4 -> {
-            held.entfluchen(heldenliste)
-            true
-        }
-        5 -> {
-            held.statusAnzeigen()
-            false
-        }
-        else -> {
-            held.itemBenutzen()
-        }
-    }
-}
-
-fun druideMenue(held: Druide, gegner: Gegner, heldenliste: List<Held>): Boolean {
-    println("${held.name}: Wähle Deine Aktion:")
-    println("1. Angreifen")
-    println("2. Schadzauber")
-    println("3. Verteidigen")
-    println("4. Heilzauber")
-    println("5. Status anzeigen")
-    println("6. Item benutzen")
-    val eingabe = sichereEingabe(6)
-    return when(eingabe) {
-        1 -> {
-            held.angreifen(gegner)
-            true
-        }
-        2 -> {
-            held.schadenszauber(gegner)
-            true
-        }
-        3 -> {
-            held.verteidigen()
-            true
-        }
-        4 -> {
-            held.heilzauber(heldenliste)
-            true
-        }
-        5 -> {
-            held.statusAnzeigen()
-            false
-        }
-        else -> {
-            held.itemBenutzen()
-        }
-    }
 }
 
 fun buffsDebuffsEntfernen(heldenliste: List<Held>) {
@@ -197,9 +100,185 @@ fun buffsDebuffsEntfernen(heldenliste: List<Held>) {
 
 fun lebenspunkteAusgabe(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
     for (gegner in gegnerliste) {
-        println("${gegner.name}: ${gegner.lp}")
+        println("${gegner.name}: ${gegner.lebenspunkte()}")
     }
     for (held in heldenliste) {
-        println("${held.name}: ${held.lp}")
+        println("${held.name}: ${held.lebenspunkte()}")
+    }
+}
+
+fun heldenInstanziieren(): Held {
+    println("Welche Klasse soll Dein Charakter erhalten?")
+    println("1. Krieger - 2. Druide - 3. Magier")
+    val eingabeKlasse: Int = sichereEingabe(3)
+    print("Wie soll Dein Charakter heißen: ")
+    val eingabeName: String = readln()
+
+    return when (eingabeKlasse) {
+        1 -> {
+            Krieger(eingabeName)
+        }
+        2 -> {
+            Druide(eingabeName)
+        }
+        else -> {
+            Magier(eingabeName)
+        }
+    }
+}
+
+fun heldenteamInstanziieren(): List<Held> {
+    val heldenliste: MutableList<Held> = mutableListOf()
+    repeat(3) {
+        heldenliste.add(heldenInstanziieren())
+    }
+
+    return heldenliste.toList()
+}
+
+fun endgegnerInstanziieren(): MutableList<Gegner> {
+    return mutableListOf(Drache())
+}
+
+fun toteSchwaermerEntfernen(gegnerliste: MutableList<Gegner>) {
+    var speicher: MutableList<Gegner> = mutableListOf()
+    for (gegner in gegnerliste) {
+        if (gegner.lebenspunkte() < 0 && gegner is Schwaermer) {
+            gegner.lebenspunkteSetzen(0)
+            speicher.add(gegner)
+        }
+    }
+    for (gegner in speicher) {
+        gegnerliste.remove(gegner)
+    }
+}
+
+fun heldenzug(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
+    val gegner: Gegner = gegnerliste.random()
+
+    for (held in heldenliste) {
+        buffsDebuffsAnwenden(held)
+
+        var bedingung: Boolean = false
+        while(!bedingung && held.lebenspunkte() > 0 && gegnerliste[0].lebenspunkte() > 0) {
+            bedingung = charakterMenue(held,gegner,heldenliste)
+        }
+    }
+}
+
+fun buffsDebuffsAnwenden(held: Held) {
+    if (held.buffs.isNotEmpty()) {
+        for (buff in held.buffs) {
+            buff.effekt(held)
+        }
+    }
+    if (held.debuffs.isNotEmpty()) {
+        for (debuff in held.debuffs) {
+            debuff.effekt(held)
+        }
+    }
+}
+
+fun kampfrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>){
+    heldenzug(heldenliste,gegnerliste)
+    toteSchwaermerEntfernen(gegnerliste)
+    attackeGegner(gegnerliste, heldenliste)
+    buffsDebuffsEntfernen(heldenliste)
+}
+
+fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
+    val zufallszahl: Int = (1..5).random()
+    var speicher: Gegner? = null
+
+    var schwaermerGefressen: Boolean = false
+    for (gegner in gegnerliste) {
+        if (gegner is Drache && gegner !is Schwaermer) {
+            when (zufallszahl) {
+                1 -> {
+                    gegner.feueratem(heldenliste)
+                }
+
+                2 -> {
+                    gegner.fluchDesDrachen(heldenliste)
+                }
+
+                3 -> {
+                    var schwaermerVorhanden: Boolean = false
+                    for (gegner in gegnerliste) {
+                        if (gegner is Schwaermer) schwaermerVorhanden = true
+                    }
+                    if (!schwaermerVorhanden) {
+                        speicher = gegner.schwaermerBeschwoeren(gegnerliste)
+                    } else {
+                        if (gegnerliste[1] is Schwaermer) {
+                            gegner.schwaermerFressen(gegnerliste[1] as Schwaermer)
+                            schwaermerGefressen = true
+                        }
+                    }
+                }
+                4 -> {
+                    gegner.angreifen(heldenliste.random())
+                }
+                else -> {
+                    gegner.heilen()
+                }
+            }
+        } else if (gegner is Schwaermer && !schwaermerGefressen) {
+            listOf(
+                {
+                    println("Der Schwärmer versucht anzugreifen, es geht daneben.")
+                },
+                {
+                    val held: Held = heldenliste.random()
+                    println("Der Schwärmer greift ${held.name} an.")
+                    gegner.angreifen(held)
+                },
+                {
+                    gegner.feueratem(heldenliste)
+                }
+            ).random()
+        }
+    }
+
+    if (speicher != null) {
+        gegnerliste.add(speicher)
+    }
+}
+
+fun spielrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
+    val held1: Held = heldenliste[0]
+    val held2: Held = heldenliste[1]
+    val held3: Held = heldenliste[2]
+
+    val drache: Gegner = gegnerliste[0]
+
+    while (drache.lebenspunkte() > 0 && (held1.lebenspunkte() > 0 || held2.lebenspunkte() > 0 || held3.lebenspunkte() > 0)) {
+        kampfrunde(heldenliste, gegnerliste)
+        if (drache.lebenspunkte() < 0) {
+            drache.lebenspunkteSetzen(0)
+            if (gegnerliste.size == 2) gegnerliste[1].lebenspunkteSetzen(0)
+            println("Der Drache wurde besiegt!")
+            break
+        }
+        if (held1.lebenspunkte() < 0) {
+            held1.lebenspunkteSetzen(0)
+            println("${held1.name} ist gestorben")
+        } else if (held2.lebenspunkte() < 0) {
+            held2.lebenspunkteSetzen(0)
+            println("${held2.name} ist gestorben")
+        } else if (held3.lebenspunkte() < 0) {
+            held3.lebenspunkteSetzen(0)
+            println("${held3.name} ist gestorben")
+        }
+
+        if (held1.lebenspunkte() < 0) held1.lebenspunkteSetzen(0)
+        if (held2.lebenspunkte() < 0) held2.lebenspunkteSetzen(0)
+        if (held3.lebenspunkte() < 0) held3.lebenspunkteSetzen(0)
+        if (held1.lebenspunkte() == 0 && held2.lebenspunkte() == 0 && held3.lebenspunkte() == 0) {
+            println("Der Drache hat alle Helden besiegt.")
+            break
+        }
+
+        lebenspunkteAusgabe(gegnerliste, heldenliste)
     }
 }

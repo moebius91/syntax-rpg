@@ -7,6 +7,7 @@ open class Debuff(charakter: Charakter) {
     open var abgeklungen: Boolean = false
 
     open var name: String = "Debuff"
+    open var beschreibung: String = "Negative Beeinflussung Deines Charakters."
 
     open fun effekt(charakter: Charakter) {
         schaden(charakter)
@@ -22,4 +23,5 @@ open class Debuff(charakter: Charakter) {
     open fun aufheben(charakter: Charakter) {
         charakter.debuffs.remove(this)
     }
+
 }

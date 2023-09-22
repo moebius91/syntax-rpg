@@ -4,6 +4,7 @@ import Charakter.Helden.Held
 
 open class Item(var name: String = "Unbekanntes Item", val verbrauchbar: Boolean = true) {
     val zahl: Int = (0..6).random()
+    open var beschreibung: String = "Ein Dir unbekanntes Item."
     open fun benutzen(held: Held): Boolean {
         when (zahl) {
             0 -> {
@@ -32,7 +33,7 @@ open class Item(var name: String = "Unbekanntes Item", val verbrauchbar: Boolean
     }
 
     open fun beschreibungAnzeigen() {
-        println("Ein Dir unbekanntes Item.")
+        println(beschreibung)
     }
 
     fun istVerbrauchbar(): Boolean {
@@ -42,4 +43,5 @@ open class Item(var name: String = "Unbekanntes Item", val verbrauchbar: Boolean
     fun zeigeName(){
         println(this.name)
     }
+
 }
