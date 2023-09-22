@@ -421,11 +421,9 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                 1 -> {
                     gegner.feueratem(heldenliste)
                 }
-
                 2 -> {
                     gegner.fluchDesDrachen(heldenliste)
                 }
-
                 3 -> {
                     var schwaermerVorhanden: Boolean = false
                     for (gegner in gegnerliste) {
@@ -498,6 +496,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
     // Nach Iteration über die Gegnerliste
     if (schwaermerGefressen) {
         gegnerliste.remove(speicher)
+        speicher = null
     }
 
     // Fügt einen Schwärmer der Gegnerliste hinzu
