@@ -25,10 +25,10 @@ fun heldenTest(held: Held, gegner: Gegner) {
     held.waehleWaffe()
     println("Lebenspunkte vor dem ersten Angriff:")
 
-    println("Heldenlebenspunkte: ${held.lp}")
-    println("Endgegnerlebenspunkte: ${gegner.lp}\n")
+    println("Heldenlebenspunkte: ${held.lebenspunkte()}")
+    println("Endgegnerlebenspunkte: ${gegner.lebenspunkte()}\n")
     Thread.sleep(1000)
     held.angreifen(gegner)
-    println("Heldenlebenspunkte: ${held.lp}")
-    println("Endgegnerlebenspunkte: ${gegner.lp}\n")
+    println("Heldenlebenspunkte: ${held.lebenspunkte()}")
+    println("Endgegnerlebenspunkte: ${gegner.lebenspunkte()}\n")
 }
