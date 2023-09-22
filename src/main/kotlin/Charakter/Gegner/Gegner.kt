@@ -2,7 +2,7 @@ package Charakter.Gegner
 
 import Charakter.Charakter
 import Charakter.Helden.Held
-import ausgabeSchaden
+import anwendenUndBerichtenSchaden
 
 open class Gegner(override var lp: Int = 100): Charakter() {
     override var name: String = "Charakter/Gegner"
@@ -12,7 +12,7 @@ open class Gegner(override var lp: Int = 100): Charakter() {
         Thread.sleep(1000)
         var maxSchaden: Int = staerke
         var schaden: Int = (0..maxSchaden).random()
-        ausgabeSchaden(this,schaden, maxSchaden, held)
+        anwendenUndBerichtenSchaden(this,schaden, maxSchaden, held)
     }
 
     open fun verteidigen() {

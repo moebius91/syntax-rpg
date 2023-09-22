@@ -1,10 +1,9 @@
 package Charakter.Helden
 
 import Charakter.Gegner.Gegner
-import StatusEffekte.Debuffs.FluchDesDrachen
 import StatusEffekte.Debuffs.FluchDesMagiers
 import Waffen.*
-import ausgabeSchaden
+import anwendenUndBerichtenSchaden
 import sichereEingabe
 
 class Magier(name: String): Held(name) {
@@ -30,7 +29,7 @@ class Magier(name: String): Held(name) {
         println("${this.name} wirkt einen starken Zauber.")
         var maxSchaden: Int = (intelligenz * 14.toDouble() / 10).toInt()
         var schaden: Int = (intelligenz * (7..14).random().toDouble() / 10).toInt()
-        ausgabeSchaden(this,schaden,maxSchaden, gegner)
+        anwendenUndBerichtenSchaden(this,schaden,maxSchaden, gegner)
         return true
     }
 
