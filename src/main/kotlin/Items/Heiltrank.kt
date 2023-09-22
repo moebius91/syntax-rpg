@@ -4,9 +4,9 @@ import Charakter.Helden.Held
 
 class Heiltrank() : Item("Heiltrank") {
     override fun benutzen(held: Held): Boolean{
-        if (held.lp < held.maxlp) {
-            var heilung: Int = (held.maxlp - held.lp) / 2
-            held.lp += heilung
+        if (held.lebenspunkte() < held.maxLebenspunkte()) {
+            var heilung: Int = (held.maxLebenspunkte() - held.lebenspunkte()) / 2
+            held.heilungErfahren(heilung)
             println("${held.name} wurde um $heilung Lebenspunkte geheilt.")
             return true
         }

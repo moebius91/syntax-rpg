@@ -9,8 +9,8 @@ class FluchDesMagiers(gegner: Gegner): Debuff(gegner) {
     override var beschreibung: String = "Der Fluch des Magiers: 3 Runden werden 5% der maximalen LP abgezogen."
 
     override fun schaden(charakter: Charakter) {
-        if (!abgeklungen && charakter.lp > charakter.maxlp/5) {
-            charakter.lp -= charakter.maxlp / 20
+        if (!abgeklungen && charakter.lebenspunkte() > charakter.maxLebenspunkte()/5) {
+            charakter.schadenNehmen(charakter.maxLebenspunkte() / 20)
         } else {
             abgeklungen = true
         }
