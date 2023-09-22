@@ -28,16 +28,14 @@ open class Charakter {
 
     open fun heilungErfahren(heilwert: Int) {
         lp += heilwert
-        if (lp > maxlp) lp = maxlp
-    }
-
-    fun lebenspunkteSetzen(wert: Int) {
-        this.lp = wert
-        if (lp > maxlp) lp = maxlp
     }
 
     fun lebenspunkte(): Int {
         return this.lp
+    }
+
+    fun lebenspunkteSetzen(wert: Int) {
+        this.lp = wert
     }
 
     fun maxLebenspunkte(): Int {
