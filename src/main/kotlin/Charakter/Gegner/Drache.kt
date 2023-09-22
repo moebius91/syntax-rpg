@@ -2,6 +2,7 @@ package Charakter.Gegner
 
 import Charakter.Helden.Held
 import StatusEffekte.Debuffs.FluchDesDrachen
+import anwendenUndBerichtenSchaden
 
 open class Drache: Gegner() {
     // Name
@@ -10,6 +11,19 @@ open class Drache: Gegner() {
     // Lebenspunkte und maximale Lebenspunkte
     override var lp: Int = (300..350).random()
     override var maxlp: Int = lp
+
+    // Attribute für Heilung, Schaden und Verteidigung
+    override var staerke: Int = (30..50).random()
+    override var ausdauer: Int = (30..50).random()
+    override var intelligenz: Int = (30..50).random()
+
+    override fun angreifen(held: Held) {
+        println("${this.name} holt zum Angriff aus!")
+        Thread.sleep(1000)
+        var maxSchaden: Int = staerke
+        var schaden: Int = listOf((30..maxSchaden).random(), 0).random()
+        anwendenUndBerichtenSchaden(this,schaden, maxSchaden, held)
+    }
     open fun feueratem(heldenliste: List<Held>) {
         val schaden: Int = (50..100).random() / 3
         println("Der Feueratem des Drachen trifft alle Helden!")
@@ -48,8 +62,13 @@ open class Drache: Gegner() {
     }
 
     fun heilen(){
-        println("${this.name} heilt sich selbst.")
-        this.lp += this.maxlp / 10
-        if (this.lp > this.maxlp) this.lp = this.maxlp
+        var alteLp: Int = this.lp
+        var geheilt: Int = (this.maxlp / 10) * (intelligenz / 10)
+        this.lp += geheilt
+        if (this.lp > this.maxlp) {
+            this.lp = this.maxlp
+            geheilt = this.maxlp - alteLp
+        }
+        println("${this.name} heilt sich selbst um $geheilt Lebenspunkte.")
     }
 }

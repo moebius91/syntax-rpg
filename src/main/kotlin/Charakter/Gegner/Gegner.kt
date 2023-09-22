@@ -5,7 +5,8 @@ import Charakter.Helden.Held
 import anwendenUndBerichtenSchaden
 
 open class Gegner(override var lp: Int = 100): Charakter() {
-    override var name: String = "Charakter/Gegner"
+    // Name
+    override var name: String = "Gegner"
 
     open fun angreifen(held: Held) {
         println("${this.name} holt zum Angriff aus!")
