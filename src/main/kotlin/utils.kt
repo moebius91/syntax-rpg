@@ -241,13 +241,13 @@ fun heldenInstanziieren(): Held {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun heldenteamInstanziieren(): List<Held> {
+fun heldenteamInstanziieren(): MutableList<Held> {
     val heldenliste: MutableList<Held> = mutableListOf()
     repeat(3) {
         heldenliste.add(heldenInstanziieren())
     }
 
-    return heldenliste.toList()
+    return heldenliste
 }
 
 /**
@@ -448,9 +448,11 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     gegner.heilen()
                 }
             }       // Wählt den Unterboss aus
-        } else if (gegner is Schwaermer && !schwaermerGefressen && gegner.lebenspunkte() > 0) {
+        }
+
+        if (gegner is Schwaermer && !schwaermerGefressen && gegner.lebenspunkte() > 0) {
             // Wählt aus einer Liste eine zufällige Aktion und führt sie aus.
-            listOf(
+            val aktionen = listOf(
                 {
                     println("Der Schwärmer versucht anzugreifen, es geht daneben.")
                 },
@@ -463,6 +465,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     gegner.feueratem(heldenliste)
                 },
                 {
+                    println("Testprintline")
                     val kriegerliste: MutableList<Krieger> = mutableListOf()
                     for (held in heldenliste) {
                         if (held is Krieger) {
@@ -483,7 +486,9 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                         println("Es gibt keine Krieger in der Heldengruppe.")
                     }
                 }
-            ).random()
+            )
+
+            aktionen.random().invoke()
         }
 
         // Speichert einen Verweis auf die zu löschende Objektinstanz
@@ -517,7 +522,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun spielrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
+fun spielrunde(heldenliste: MutableList<Held>, gegnerliste: MutableList<Gegner>) {
     val held1: Held = heldenliste[0]
     val held2: Held = heldenliste[1]
     val held3: Held = heldenliste[2]
@@ -526,17 +531,18 @@ fun spielrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
 
     while (drache.lebenspunkte() > 0 && (held1.lebenspunkte() > 0 || held2.lebenspunkte() > 0 || held3.lebenspunkte() > 0)) {
         kampfrunde(heldenliste, gegnerliste)
-        if (drache.lebenspunkte() <= 0) {
-            drache.lebenspunkteSetzen(0)
+        ueberpruefeUndEntferneHeldGestorben(heldenliste)
+
+        if (drache.lebenspunkte() <= 0 && heldenliste.isNotEmpty()) {
+            if (drache.lebenspunkte() != 0) drache.lebenspunkteSetzen(0)
             if (gegnerliste.size == 2) gegnerliste[1].lebenspunkteSetzen(0)
             println("Der Drache wurde besiegt!")
             lebenspunkteAusgabe(gegnerliste, heldenliste)
             break
         }
 
-        ueberpruefeHeldGestorben(heldenliste)
 
-        if (held1.lebenspunkte() == 0 && held2.lebenspunkte() == 0 && held3.lebenspunkte() == 0) {
+        if (heldenliste.isEmpty()) {
             println("Der Drache hat alle Helden besiegt.")
             break
         }
@@ -545,12 +551,17 @@ fun spielrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
     }
 }
 
-fun ueberpruefeHeldGestorben(heldenliste: List<Held>) {
+fun ueberpruefeUndEntferneHeldGestorben(heldenliste: MutableList<Held>) {
+    val gestorbeneHelden: MutableList<Held> = mutableListOf()
     for (held in heldenliste) {
         if (held.lebenspunkte() <= 0) {
             held.lebenspunkteSetzen(0)
             println("${held.name} ist gestorben.")
+            gestorbeneHelden.add(held)
         }
+    }
+    for (held in gestorbeneHelden) {
+        heldenliste.remove(held)
     }
 }
 

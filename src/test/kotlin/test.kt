@@ -8,7 +8,7 @@ fun main() {
     val held3: Magier = Magier("Magier")
 
     // Verpacken der Charaktere in jeweilige Listen
-    val heldenliste: List<Held> = listOf(held1, held2, held3)
+    val heldenliste: MutableList<Held> = mutableListOf(held1, held2, held3)
     val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
 
     // Inventar für die Helden anlegen

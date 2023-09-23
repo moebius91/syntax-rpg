@@ -4,10 +4,11 @@ import Charakter.Helden.*
 fun main() {
     // Spielbegrüßung
     spielBegruessung()
+    //TODO("Heldenliste als MutableListe um tote Spieler zu entfernen.")
 
     // Instanziiert die Heldengruppe
     // Der Spieler hat freie Auswahl über gewählte Klassen und Namen.
-    val heldenliste: List<Held> = heldenteamInstanziieren()
+    val heldenliste: MutableList<Held> = heldenteamInstanziieren()
     // Anlegen der Heldeninventare
     heldenteamInventareAnlegen(heldenliste)
 
