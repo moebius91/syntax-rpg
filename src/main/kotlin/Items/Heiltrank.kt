@@ -6,7 +6,7 @@ class Heiltrank() : Item("Heiltrank") {
     override fun benutzen(held: Held): Boolean{
         if (held.lebenspunkte() < held.maxLebenspunkte()) {
             var heilung: Int = (held.maxLebenspunkte() - held.lebenspunkte()) / 2
-            held.heilungErfahren(heilung)
+            heilung = held.heilungErfahren(heilung)
             println("${held.name} wurde um $heilung Lebenspunkte geheilt.")
             return true
         }

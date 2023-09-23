@@ -27,9 +27,12 @@ open class Charakter {
         return gesamtschaden
     }
 
-    open fun heilungErfahren(heilwert: Int) {
-        lp += heilwert
-        if (lp > maxlp) lp = maxlp
+    open fun heilungErfahren(heilwert: Int): Int {
+        var fehlendeLp: Int = maxlp - lp
+        var heilwertFinal: Int = heilwert
+        if (heilwert > fehlendeLp) heilwertFinal = fehlendeLp
+        lp += heilwertFinal
+        return heilwertFinal
     }
 
     fun lebenspunkteSetzen(wert: Int) {
