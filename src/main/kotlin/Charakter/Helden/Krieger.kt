@@ -3,7 +3,7 @@ package Charakter.Helden
 import Charakter.Gegner.Gegner
 import StatusEffekte.Buffs.SchildGebrauch
 import Waffen.*
-import anwendenUndBerichtenSchaden
+import schadenAnwendenUndBerichten
 import sichereEingabe
 
 class Krieger(name: String): Held(name) {
@@ -31,7 +31,7 @@ class Krieger(name: String): Held(name) {
         }
 
         if (schaden > 50) schaden = 50
-        anwendenUndBerichtenSchaden(this, schaden, maxSchaden, gegner)
+        schadenAnwendenUndBerichten(this, schaden, maxSchaden, gegner)
         return true
     }
 

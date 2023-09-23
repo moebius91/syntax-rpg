@@ -40,25 +40,27 @@ fun sichereEingabe(eintraege:Int): Int {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun anwendenUndBerichtenSchaden(angreifer: Charakter, schaden: Int, maxSchaden:Int, gegner: Charakter) {
+fun schadenAnwendenUndBerichten(angreifer: Charakter, schaden: Int, maxSchaden:Int, gegner: Charakter) {
     val zahl1: Int = maxSchaden / 3
     val zahl2: Int = maxSchaden / 3 * 2
+    val echterSchaden: Int = gegner.schadenNehmen(schaden)
 
-    when (schaden) {
+    when (echterSchaden) {
         0 -> {
-            println("${angreifer.name} hat nicht getroffen..")
+            if (schaden == 0) {
+                println("${angreifer.name} hat nicht getroffen..")
+            } else {
+                println("${angreifer.name} hat keinen Schaden verursacht..")
+            }
         }
         in 1.. zahl1 -> {
-            gegner.schadenNehmen(schaden)
-            println("${angreifer.name} hat geringen Schaden verursacht.. ($schaden)")
+            println("${angreifer.name} hat geringen Schaden verursacht.. ($echterSchaden)")
         }
         in 11 .. zahl2 -> {
-            gegner.schadenNehmen(schaden)
-            println("${angreifer.name} hat Schaden verursacht. ($schaden)")
+            println("${angreifer.name} hat Schaden verursacht. ($echterSchaden)")
         }
         else -> {
-            gegner.schadenNehmen(schaden)
-            println("${angreifer.name} hat großen Schaden verursacht! ($schaden)")
+            println("${angreifer.name} hat großen Schaden verursacht! ($echterSchaden)")
         }
     }
 }

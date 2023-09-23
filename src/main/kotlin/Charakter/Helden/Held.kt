@@ -4,7 +4,7 @@ import Charakter.Charakter
 import Charakter.Gegner.Gegner
 import Items.*
 import Waffen.*
-import anwendenUndBerichtenSchaden
+import schadenAnwendenUndBerichten
 import sichereEingabe
 
 open class Held(override var name:String): Charakter() {
@@ -29,7 +29,7 @@ open class Held(override var name:String): Charakter() {
         Thread.sleep(1000)
         var maxSchaden: Int = staerke
         var schaden: Int = (0..maxSchaden).random()
-        anwendenUndBerichtenSchaden(this,schaden, maxSchaden, gegner)
+        schadenAnwendenUndBerichten(this,schaden, maxSchaden, gegner)
         return true
     }
 

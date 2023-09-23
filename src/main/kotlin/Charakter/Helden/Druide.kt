@@ -2,7 +2,7 @@ package Charakter.Helden
 
 import Charakter.Gegner.Gegner
 import Waffen.*
-import anwendenUndBerichtenSchaden
+import schadenAnwendenUndBerichten
 import sichereEingabe
 
 class Druide(name: String): Held(name) {
@@ -25,7 +25,7 @@ class Druide(name: String): Held(name) {
         var maxSchaden: Int = staerke
         if (tierForm) maxSchaden = (maxSchaden * 15) / 10
         val schaden: Int = (0..maxSchaden).random()
-        anwendenUndBerichtenSchaden(this,schaden, maxSchaden, gegner)
+        schadenAnwendenUndBerichten(this,schaden, maxSchaden, gegner)
         return true
     }
 
@@ -39,13 +39,13 @@ class Druide(name: String): Held(name) {
             Thread.sleep(1000)
             val maxSchaden: Int = (intelligenz * 15) / 10
             val schaden: Int = (0..maxSchaden).random()
-            anwendenUndBerichtenSchaden(this,schaden, maxSchaden, gegner)
+            schadenAnwendenUndBerichten(this,schaden, maxSchaden, gegner)
         } else {
             println("${this.name} baut sich auf und wirkt einen Zauber.")
             Thread.sleep(1000)
             val maxSchaden: Int = intelligenz
             val schaden: Int = (0..maxSchaden).random()
-            anwendenUndBerichtenSchaden(this,schaden, maxSchaden, gegner)
+            schadenAnwendenUndBerichten(this,schaden, maxSchaden, gegner)
         }
 
         return true

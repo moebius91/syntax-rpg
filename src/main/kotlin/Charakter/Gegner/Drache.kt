@@ -2,7 +2,7 @@ package Charakter.Gegner
 
 import Charakter.Helden.Held
 import StatusEffekte.Debuffs.FluchDesDrachen
-import anwendenUndBerichtenSchaden
+import schadenAnwendenUndBerichten
 
 open class Drache: Gegner() {
     // Name
@@ -22,7 +22,7 @@ open class Drache: Gegner() {
         Thread.sleep(1000)
         var maxSchaden: Int = staerke
         var schaden: Int = listOf((30..maxSchaden).random(), 0).random()
-        anwendenUndBerichtenSchaden(this,schaden, maxSchaden, held)
+        schadenAnwendenUndBerichten(this,schaden, maxSchaden, held)
     }
     open fun feueratem(heldenliste: List<Held>) {
         val schaden: Int = (50..100).random() / 3

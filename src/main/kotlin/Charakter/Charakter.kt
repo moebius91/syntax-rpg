@@ -20,10 +20,11 @@ open class Charakter {
     val buffs: MutableList<Buff> = mutableListOf()
     val debuffs: MutableList<Debuff> = mutableListOf()
 
-    open fun schadenNehmen(schaden: Int) {
+    open fun schadenNehmen(schaden: Int): Int {
         var gesamtschaden: Int = schaden-(ausdauer / 10)
         if (gesamtschaden < 0) gesamtschaden = 0
         lp -= gesamtschaden
+        return gesamtschaden
     }
 
     open fun heilungErfahren(heilwert: Int) {
