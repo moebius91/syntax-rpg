@@ -127,72 +127,6 @@ fun charakterMenue(held: Held, gegner: Gegner, heldenliste: List<Held>): Boolean
 }
 
 /**
- * Reduziert die Dauer der Buffs eines Helden und entfernt abgelaufene Buffs.
- * Geht durch die Liste der aktiven Buffs und verringert ihre Dauer,
- * sammelt abgelaufene Buffs in einer temporären Liste und entfernt sie.
- *
- * @param held Der Held, dessen Buffs bearbeitet werden.
- *
- * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
- */
-
-fun buffsEntfernen(held: Held) {
-    if (held.buffs.isNotEmpty()) {
-        val buffs: MutableList<Buff> = mutableListOf()
-        for (buff in held.buffs) {
-            buff.dauerRunde --
-            if (buff.dauerRunde == 0) {
-                buffs.add(buff)
-            }
-        }
-        for (buff in buffs) {
-            held.buffs.remove(buff)
-        }
-    }
-}
-
-/**
- * Reduziert die Dauer der Debuffs eines Helden und entfernt abgelaufene oder abgeklungene Debuffs.
- * Geht durch die Liste der aktiven Debuffs, verringert ihre Dauer und
- * sammelt abgelaufene oder abgeklungene Debuffs in einer temporären Liste, um sie dann zu entfernen.
- *
- * @param held Der Held, dessen Debuffs bearbeitet werden.
- *
- * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
- */
-
-fun debuffsEntfernen(held: Held) {
-    if (held.debuffs.isNotEmpty()) {
-        val debuffs: MutableList<Debuff> = mutableListOf()
-        for (debuff in held.debuffs) {
-            debuff.dauerRunde --
-            if (debuff.dauerRunde == 0 || debuff.abgeklungen) {
-                debuffs.add(debuff)
-            }
-        }
-        for (debuff in debuffs) {
-            held.debuffs.remove(debuff)
-        }
-    }
-}
-
-/**
- * Entfernt Buffs und Debuffs für eine Liste von Helden.
- * Ruft die Funktionen `buffsEntfernen` und `debuffsEntfernen` für jeden Helden in der Liste auf.
- *
- * @param heldenliste Die Liste der Held-Objekte, deren Buffs und Debuffs entfernt werden sollen.
- *
- * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
- */
-
-fun buffsDebuffsEntfernen(heldenliste: List<Held>) {
-    for (held in heldenliste) {
-        buffsEntfernen(held)
-        debuffsEntfernen(held)
-    }
-}
-
-/**
  * Gibt die aktuellen Lebenspunkte für eine Liste von Helden und Gegnern aus.
  * Durchläuft sowohl die Liste der Gegner als auch der Helden und gibt deren Namen und Lebenspunkte aus.
  *
@@ -213,6 +147,7 @@ fun lebenspunkteAusgabe(gegnerliste: MutableList<Gegner>, heldenliste: List<Held
             println("${held.name}: ${held.lebenspunkte()}/${held.maxLebenspunkte()}")
         }
     }
+    println()
 }
 
 /**
@@ -276,29 +211,6 @@ fun endgegnerInstanziieren(): MutableList<Gegner> {
 }
 
 /**
- * Bereinigt die Gegnerliste von 'Schwaermer'-Gegnern mit negativen Lebenspunkten, um eine korrekte Spiellogik zu gewährleisten.
- * Diese Funktion stellt sicher, dass keine Gegner mit negativen Lebenspunkten in der Liste verbleiben, indem sie die Lebenspunkte auf 0 setzt und sie aus der Liste entfernt.
- *
- * @param gegnerliste Die Liste von Gegner-Objekten, in der tote 'Schwaermer' korrigiert und entfernt werden sollen.
- *
- * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
- */
-
-fun toteGegnerEntfernen(gegnerliste: MutableList<Gegner>) {
-    var speicher: MutableList<Gegner> = mutableListOf()
-    for (gegner in gegnerliste) {
-        if (gegner.lebenspunkte() <= 0) {
-            gegner.lebenspunkteSetzen(0)
-            speicher.add(gegner)
-        }
-    }
-    for (gegner in speicher) {
-        println("${gegner.name} wurde besiegt.")
-        gegnerliste.remove(gegner)
-    }
-}
-
-/**
  * Führt einen Spielzug für jedes Held-Objekt in der gegebenen Liste aus.
  * Wendet zuerst alle aktiven Buffs und Debuffs auf den Helden an, dann führt der Held einen Zug gegen einen zufällig ausgewählten Gegner aus.
  *
@@ -348,10 +260,10 @@ fun gegnerAuswahl(held: Held, gegnerliste: MutableList<Gegner>): Gegner {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun buffsAnwenden(held: Held) {
-    if (held.buffs.isNotEmpty()) {
-        for (buff in held.buffs) {
-            buff.effekt(held)
+fun buffsAnwenden(charakter: Charakter) {
+    if (charakter.buffs.isNotEmpty()) {
+        for (buff in charakter.buffs) {
+            buff.effekt(charakter)
         }
     }
 }
@@ -365,10 +277,10 @@ fun buffsAnwenden(held: Held) {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun debuffsAnwenden(held: Held) {
-    if (held.debuffs.isNotEmpty()) {
-        for (debuff in held.debuffs) {
-            debuff.effekt(held)
+fun debuffsAnwenden(charakter: Charakter) {
+    if (charakter.debuffs.isNotEmpty()) {
+        for (debuff in charakter.debuffs) {
+            debuff.effekt(charakter)
         }
     }
 }
@@ -382,9 +294,77 @@ fun debuffsAnwenden(held: Held) {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun buffsDebuffsAnwenden(held: Held) {
-    buffsAnwenden(held)
-    debuffsAnwenden(held)
+fun buffsDebuffsAnwenden(charakter: Charakter) {
+    buffsAnwenden(charakter)
+    debuffsAnwenden(charakter)
+}
+
+/**
+ * Reduziert die Dauer der Buffs eines Helden und entfernt abgelaufene Buffs.
+ * Geht durch die Liste der aktiven Buffs und verringert ihre Dauer,
+ * sammelt abgelaufene Buffs in einer temporären Liste und entfernt sie.
+ *
+ * @param held Der Held, dessen Buffs bearbeitet werden.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
+ */
+
+fun buffsEntfernen(charakter: Charakter) {
+    if (charakter.buffs.isNotEmpty()) {
+        val buffs: MutableList<Buff> = mutableListOf()
+        for (buff in charakter.buffs) {
+            buff.dauerRunde --
+            if (buff.dauerRunde == 0) {
+                buffs.add(buff)
+                buff.aufheben(charakter)
+            }
+        }
+        for (buff in buffs) {
+            charakter.buffs.remove(buff)
+        }
+    }
+}
+
+/**
+ * Reduziert die Dauer der Debuffs eines Helden und entfernt abgelaufene oder abgeklungene Debuffs.
+ * Geht durch die Liste der aktiven Debuffs, verringert ihre Dauer und
+ * sammelt abgelaufene oder abgeklungene Debuffs in einer temporären Liste, um sie dann zu entfernen.
+ *
+ * @param held Der Held, dessen Debuffs bearbeitet werden.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
+ */
+
+fun debuffsEntfernen(charakter: Charakter) {
+    if (charakter.debuffs.isNotEmpty()) {
+        val debuffs: MutableList<Debuff> = mutableListOf()
+        for (debuff in charakter.debuffs) {
+            debuff.dauerRunde --
+            if (debuff.dauerRunde == 0 || debuff.abgeklungen) {
+                debuffs.add(debuff)
+                debuff.aufheben(charakter)
+            }
+        }
+        for (debuff in debuffs) {
+            charakter.debuffs.remove(debuff)
+        }
+    }
+}
+
+/**
+ * Entfernt Buffs und Debuffs für eine Liste von Helden.
+ * Ruft die Funktionen `buffsEntfernen` und `debuffsEntfernen` für jeden Helden in der Liste auf.
+ *
+ * @param heldenliste Die Liste der Held-Objekte, deren Buffs und Debuffs entfernt werden sollen.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
+ */
+
+fun buffsDebuffsEntfernen(charakterliste: List<Charakter>) {
+    for (charakter in charakterliste) {
+        buffsEntfernen(charakter)
+        debuffsEntfernen(charakter)
+    }
 }
 
 /**
@@ -432,49 +412,56 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
         // Sorgt dafür, daß der Drache seine Aktionen ausführen kann
         if (gegner is Drache && gegner !is Schwaermer && gegner.lebenspunkte() > 0) {
             // Wählt die Attacke des Endgegners
-            when (zufallszahl) {
-                1 -> {
+            val wahrscheinlichkeiten: List<Int> = listOf(15,10,10,50,10,5)
+            val aktionen: List<() -> Unit> = listOf(
+                {
+                    // Aktion 1 mit 15%
                     gegner.feueratem(heldenliste)
-                }
-                2 -> {
+                },
+                {
+                    // Aktion 2 mit 10%
                     gegner.fluchDesDrachen(heldenliste)
-                }
-                3 -> {
+                },
+                {
+                    // Aktion 3 mit 10%
                     var schwaermerVorhanden: Boolean = false
+                    var schwaermer: Schwaermer = Schwaermer()
                     for (gegner in gegnerliste) {
-                        if (gegner is Schwaermer) schwaermerVorhanden = true
+                        if (gegner is Schwaermer) {
+                            schwaermerVorhanden = true
+                            schwaermer = gegner
+                        }
                     }
+
                     if (!schwaermerVorhanden) {
                         speicher = gegner.schwaermerBeschwoeren(gegnerliste)
                     } else {
-                        var schwaermerVorhanden: Boolean = false
-                        var schwaermer: Schwaermer = Schwaermer()
-                        for (gegner in gegnerliste) {
-                            if (gegner is Schwaermer) {
-                                schwaermerVorhanden = true
-                                schwaermer = gegner
-                            }
-                        }
-                        if (schwaermerVorhanden) {
-                            gegner.schwaermerFressen(schwaermer)
-                            schwaermerGefressen = true
-                        }
+                        gegner.schwaermerFressen(schwaermer)
+                        schwaermerGefressen = true
                     }
-                }
-                4 -> {
-                    gegner.angreifen(heldenliste[0])
-                }
-                5 -> {
+                },
+                {
+                    // Aktionen 4 mit 50%
+                    val held: Held = heldenliste.random()
+                    println("${gegner.name} greift ${held.name} an.")
+                    gegner.angreifen(held)
+                    println()
+                },
+                {
+                    // Aktion 5 mit 10%
                     gegner.verteidigen()
-                }
-                else -> {
+                },
+                {
+                    // Aktion 6 mit 5%
                     gegner.heilen()
                 }
-            }
+            )
+            waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten,aktionen)
         }
 
         if (gegner is Schwaermer && !schwaermerGefressen && gegner.lebenspunkte() > 0) {
             // Wählt aus einer Liste eine zufällige Aktion und führt sie aus.
+            val wahrscheinlichkeiten: List<Int> = listOf(10,70,15,5)
             val aktionen = listOf(
                 {
                     println("${gegner.name} versucht anzugreifen, es geht daneben.")
@@ -483,6 +470,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     val held: Held = heldenliste.random()
                     println("${gegner.name} greift ${held.name} an.")
                     gegner.angreifen(held)
+                    println()
                 },
                 {
                     gegner.feueratem(heldenliste)
@@ -507,22 +495,23 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                         println("Es gibt keine Krieger in der Heldengruppe.")
                     }
                 })
-
-            aktionen.random().invoke()
+            waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten, aktionen)
         }
 
         if (gegner is Ork) {
+            val wahrscheinlichkeiten: List<Int> = listOf(90,10)
             val aktionen: List<() -> Unit> = listOf(
                 {
                     val held: Held = heldenliste.random()
                     println("${gegner.name} greift ${held.name} an.")
                     gegner.angreifen(held)
+                    println()
                 },
                 {
                     gegner.verteidigen()
                 })
 
-            aktionen.random().invoke()
+            waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten, aktionen)
         }
 
         // Speichert einen Verweis auf die zu löschende Objektinstanz
@@ -540,7 +529,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
 
     // Fügt einen Schwärmer der Gegnerliste hinzu
     if (speicher != null) {
-        gegnerliste.add(speicher)
+        gegnerliste.add(speicher!!)
     }
 }
 
@@ -569,13 +558,6 @@ fun spielrunde(heldenliste: MutableList<Held>, gegnerliste: MutableList<Gegner>)
         kampfrunde(heldenliste, gegnerliste)
         ueberpruefeUndEntferneHeldGestorben(heldenliste)
 
-//        if (drache.lebenspunkte() <= 0 && heldenliste.isNotEmpty() && !dracheBesiegt) {
-//            if (drache.lebenspunkte() != 0) drache.lebenspunkteSetzen(0)
-//            println("Der Drache wurde besiegt!")
-//            dracheBesiegt = true
-//        }
-
-
         if (heldenliste.isEmpty()) {
             println("Die Helden wurden besiegt.")
             break
@@ -590,7 +572,30 @@ fun spielrunde(heldenliste: MutableList<Held>, gegnerliste: MutableList<Gegner>)
         lebenspunkteAusgabe(gegnerliste, heldenliste)
     }
 
-    if (heldenGewonnen) println("Die Helden haben gewonnen!")
+    println(if (heldenGewonnen) "Die Helden haben gewonnen!" else "Spiel verloren.")
+}
+
+/**
+ * Bereinigt die Gegnerliste von 'Schwaermer'-Gegnern mit negativen Lebenspunkten, um eine korrekte Spiellogik zu gewährleisten.
+ * Diese Funktion stellt sicher, dass keine Gegner mit negativen Lebenspunkten in der Liste verbleiben, indem sie die Lebenspunkte auf 0 setzt und sie aus der Liste entfernt.
+ *
+ * @param gegnerliste Die Liste von Gegner-Objekten, in der tote 'Schwaermer' korrigiert und entfernt werden sollen.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
+ */
+
+fun toteGegnerEntfernen(gegnerliste: MutableList<Gegner>) {
+    val speicher: MutableList<Gegner> = mutableListOf()
+    for (gegner in gegnerliste) {
+        if (gegner.lebenspunkte() <= 0) {
+            gegner.lebenspunkteSetzen(0)
+            speicher.add(gegner)
+        }
+    }
+    for (gegner in speicher) {
+        println("${gegner.name} wurde besiegt.")
+        gegnerliste.remove(gegner)
+    }
 }
 
 fun ueberpruefeUndEntferneHeldGestorben(heldenliste: MutableList<Held>) {
@@ -616,4 +621,26 @@ fun spielBegruessung() {
     print("Auf Dich wartet eine spannende Reise.\r")
     Thread.sleep(2000)
     println("Stelle Deine Heldengruppe zusammen!")
+}
+
+/**
+ * Mit Hilfe von ChatGPT erstellte Funktion um Aktionen mit bestimmter
+ * Wahrscheinlichkeit auszuführen.
+ *
+ * @param wahrscheinlichkeiten Erwartet eine Liste mit Wahrscheinlichkeiten in Prozent
+ * @param aktionen Erwartet eine Liste mit Lambda-Funktionen.
+ */
+fun waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten: List<Int>, aktionen: List<() -> Unit>) {
+    if (wahrscheinlichkeiten.size != aktionen.size) throw IllegalArgumentException("Du hast eine ungleiche Anzahl von Wahrscheinlichkeiten zu Aktionen übergeben!")
+    if (wahrscheinlichkeiten.sum() != 100) throw IllegalArgumentException("Du hast Wahrscheinlichkeiten mit weniger oder mehr als 100% in Summe übergeben!")
+    val zufallszahl: Int = (1..100).random()
+    var sum: Int = 0
+
+    for (i in wahrscheinlichkeiten.indices) {
+        sum += wahrscheinlichkeiten[i]
+        if (zufallszahl < sum) {
+            aktionen[i].invoke()
+            break
+        }
+    }
 }

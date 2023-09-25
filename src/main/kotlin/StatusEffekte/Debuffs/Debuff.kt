@@ -21,7 +21,6 @@ open class Debuff(charakter: Charakter) {
     }
 
     open fun aufheben(charakter: Charakter) {
-        charakter.debuffs.remove(this)
     }
 
 }

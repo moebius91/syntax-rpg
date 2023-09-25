@@ -12,6 +12,5 @@ open class Buff(charakter: Charakter) {
 
     }
     open fun aufheben(charakter: Charakter) {
-        charakter.buffs.remove(this)
     }
 }
