@@ -1,5 +1,5 @@
-import Charakter.Gegner.*
-import Charakter.Helden.*
+import charakter.gegner.*
+import charakter.helden.*
 
 fun main() {
     // Instanziieren der Helden + Endgegner
@@ -10,7 +10,7 @@ fun main() {
     // Verpacken der Charaktere in jeweilige Listen
     val heldenliste: MutableList<Held> = mutableListOf(held1, held2, held3)
     val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
-    repeat(2) { gegnerliste.add(Ork()) }
+    gegnerliste.add(Ork())
     gegnerliste.add(Schwaermer())
 
     // Inventar für die Helden anlegen

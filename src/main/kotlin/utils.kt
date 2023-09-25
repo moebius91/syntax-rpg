@@ -1,10 +1,10 @@
-import Charakter.Charakter
-import Charakter.Gegner.*
-import Charakter.Helden.*
-import Items.Heiltrank
-import Items.Vitamine
-import StatusEffekte.Buffs.Buff
-import StatusEffekte.Debuffs.Debuff
+import charakter.Charakter
+import charakter.gegner.*
+import charakter.helden.*
+import items.Heiltrank
+import items.Vitamine
+import statuseffekte.buffs.Buff
+import statuseffekte.debuffs.Debuff
 import kotlin.Exception
 
 /**
@@ -459,7 +459,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
             waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten,aktionen)
         }
 
-        if (gegner is Schwaermer && !schwaermerGefressen && gegner.lebenspunkte() > 0) {
+        if (gegner is Schwaermer && !schwaermerGefressen) {
             // Wählt aus einer Liste eine zufällige Aktion und führt sie aus.
             val wahrscheinlichkeiten: List<Int> = listOf(10,70,15,5)
             val aktionen = listOf(
@@ -546,15 +546,9 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
  */
 
 fun spielrunde(heldenliste: MutableList<Held>, gegnerliste: MutableList<Gegner>) {
-    val held1: Held = heldenliste[0]
-    val held2: Held = heldenliste[1]
-    val held3: Held = heldenliste[2]
-
-    val drache: Gegner = gegnerliste[0]
-
     var heldenGewonnen: Boolean = false
     var dracheBesiegt: Boolean = false
-    while (gegnerliste.isNotEmpty() && (held1.lebenspunkte() > 0 || held2.lebenspunkte() > 0 || held3.lebenspunkte() > 0)) {
+    while (gegnerliste.isNotEmpty() && heldenliste.isNotEmpty()) {
         kampfrunde(heldenliste, gegnerliste)
         ueberpruefeUndEntferneHeldGestorben(heldenliste)
 

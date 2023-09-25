@@ -1,5 +1,5 @@
-import Charakter.Gegner.*
-import Charakter.Helden.*
+import charakter.gegner.*
+import charakter.helden.*
 
 fun main() {
     // Spielbegrüßung
