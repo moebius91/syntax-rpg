@@ -10,12 +10,12 @@ fun main() {
     // Verpacken der Charaktere in jeweilige Listen
     val heldenliste: MutableList<Held> = mutableListOf(held1, held2, held3)
     val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
+    gegnerliste.add(Ork())
 
     // Inventar für die Helden anlegen
     heldenteamInventareAnlegen(heldenliste)
 
     spielrunde(heldenliste,gegnerliste)
-    readln()
 }
 
 

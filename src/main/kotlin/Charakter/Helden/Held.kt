@@ -21,7 +21,6 @@ open class Held(override var name:String): Charakter() {
     override var intelligenz: Int = (10..20).random()
 
     // Ausrüstung
-    var waffenTyp: Waffe = Waffe("Unbewaffnet")
     val inventar: MutableList<Item> = mutableListOf()
 
     open fun angreifen(gegner: Gegner): Boolean {

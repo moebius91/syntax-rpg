@@ -30,7 +30,7 @@ class Schwaermer: Drache() {
 
     fun schildEntreissen(krieger: Krieger) {
         if (krieger.schildVorhanden) {
-            println("${this.name} entreißt ${krieger.name} sein Schild")
+            println("${this.name} entreißt ${krieger.name} sein Schild!")
             krieger.schildVerlieren()
         }
     }

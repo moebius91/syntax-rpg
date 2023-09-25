@@ -19,11 +19,11 @@ import kotlin.Exception
  */
 fun sichereEingabe(eintraege:Int): Int {
     return try {
-        val eingabe: Int = readln().toInt()
+        val eingabe = readln().replace(".", "").toInt()
         if(eingabe < 0 || eingabe > eintraege) throw IllegalArgumentException("Du hast eine ungültige Zahl eingegeben! '$eingabe'")
         eingabe
-    } catch (e: Exception) {
-        println(e.message)
+    } catch (ex: Exception) {
+        println(ex.message)
         sichereEingabe(eintraege)
     }
 }
@@ -43,9 +43,7 @@ fun sichereEingabe(eintraege:Int): Int {
 fun schadenAnwendenUndBerichten(angreifer: Charakter, schaden: Int, maxSchaden:Int, gegner: Charakter) {
     val zahl1: Int = maxSchaden / 3
     val zahl2: Int = maxSchaden / 3 * 2
-    val echterSchaden: Int = gegner.schadenNehmen(schaden)
-
-    when (echterSchaden) {
+    when (val echterSchaden: Int = gegner.schadenNehmen(schaden)) {
         0 -> {
             if (schaden == 0) {
                 println("${angreifer.name} hat nicht getroffen..")
@@ -109,14 +107,22 @@ fun charakterMenue(held: Held, gegner: Gegner, heldenliste: List<Held>): Boolean
     if (held.waffenTyp.name == "Unbewaffnet") {
         held.waehleWaffe()
     }
-    return if (held is Krieger) {
-        held.menue(gegner, heldenliste)
-    } else if (held is Magier) {
-        held.menue(gegner, heldenliste)
-    } else if (held is Druide) {
-        held.menue(gegner, heldenliste)
-    } else {
-        false
+    return when (held) {
+        is Krieger -> {
+            held.menue(gegner, heldenliste)
+        }
+
+        is Magier -> {
+            held.menue(gegner, heldenliste)
+        }
+
+        is Druide -> {
+            held.menue(gegner, heldenliste)
+        }
+
+        else -> {
+            false
+        }
     }
 }
 
@@ -132,7 +138,7 @@ fun charakterMenue(held: Held, gegner: Gegner, heldenliste: List<Held>): Boolean
 
 fun buffsEntfernen(held: Held) {
     if (held.buffs.isNotEmpty()) {
-        var buffs: MutableList<Buff> = mutableListOf()
+        val buffs: MutableList<Buff> = mutableListOf()
         for (buff in held.buffs) {
             buff.dauerRunde --
             if (buff.dauerRunde == 0) {
@@ -157,7 +163,7 @@ fun buffsEntfernen(held: Held) {
 
 fun debuffsEntfernen(held: Held) {
     if (held.debuffs.isNotEmpty()) {
-        var debuffs: MutableList<Debuff> = mutableListOf()
+        val debuffs: MutableList<Debuff> = mutableListOf()
         for (debuff in held.debuffs) {
             debuff.dauerRunde --
             if (debuff.dauerRunde == 0 || debuff.abgeklungen) {
@@ -197,11 +203,15 @@ fun buffsDebuffsEntfernen(heldenliste: List<Held>) {
  */
 
 fun lebenspunkteAusgabe(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
-    for (gegner in gegnerliste) {
-        println("${gegner.name}: ${gegner.lebenspunkte()}/${gegner.maxLebenspunkte()}")
+    if (gegnerliste.isNotEmpty()) {
+        for (gegner in gegnerliste) {
+            println("${gegner.name}: ${gegner.lebenspunkte()}/${gegner.maxLebenspunkte()}")
+        }
     }
-    for (held in heldenliste) {
-        println("${held.name}: ${held.lebenspunkte()}/${held.maxLebenspunkte()}")
+    if (heldenliste.isNotEmpty()) {
+        for (held in heldenliste) {
+            println("${held.name}: ${held.lebenspunkte()}/${held.maxLebenspunkte()}")
+        }
     }
 }
 
@@ -274,15 +284,16 @@ fun endgegnerInstanziieren(): MutableList<Gegner> {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun toteSchwaermerEntfernen(gegnerliste: MutableList<Gegner>) {
+fun toteGegnerEntfernen(gegnerliste: MutableList<Gegner>) {
     var speicher: MutableList<Gegner> = mutableListOf()
     for (gegner in gegnerliste) {
-        if (gegner.lebenspunkte() < 0 && gegner is Schwaermer) {
+        if (gegner.lebenspunkte() <= 0) {
             gegner.lebenspunkteSetzen(0)
             speicher.add(gegner)
         }
     }
     for (gegner in speicher) {
+        println("${gegner.name} wurde besiegt.")
         gegnerliste.remove(gegner)
     }
 }
@@ -299,13 +310,15 @@ fun toteSchwaermerEntfernen(gegnerliste: MutableList<Gegner>) {
 
 fun heldenzug(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
     for (held in heldenliste) {
+        // Überprüft ob Gegner tot sind und entfernt sie.
+        toteGegnerEntfernen(gegnerliste)
         // Überprüft ob der Endgegner gefallen ist und beendet den Heldenzug
-        if (gegnerliste[0].lebenspunkte() <= 0) break
+        if (gegnerliste.isEmpty()) break
         buffsDebuffsAnwenden(held)
 
         val gegner: Gegner = gegnerAuswahl(held, gegnerliste)
         var bedingung: Boolean = false
-        while(!bedingung && held.lebenspunkte() > 0 && gegnerliste[0].lebenspunkte() > 0) {
+        while(!bedingung && held.lebenspunkte() > 0 && gegnerliste.isNotEmpty()) {
             bedingung = charakterMenue(held,gegner,heldenliste)
         }
     }
@@ -386,7 +399,7 @@ fun buffsDebuffsAnwenden(held: Held) {
 
 fun kampfrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>){
     heldenzug(heldenliste,gegnerliste)
-    toteSchwaermerEntfernen(gegnerliste)
+    toteGegnerEntfernen(gegnerliste)
     attackeGegner(gegnerliste, heldenliste)
     buffsDebuffsEntfernen(heldenliste)
 }
@@ -434,14 +447,22 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     if (!schwaermerVorhanden) {
                         speicher = gegner.schwaermerBeschwoeren(gegnerliste)
                     } else {
-                        if (gegnerliste[1] is Schwaermer) {
-                            gegner.schwaermerFressen(gegnerliste[1] as Schwaermer)
+                        var schwaermerVorhanden: Boolean = false
+                        var schwaermer: Schwaermer = Schwaermer()
+                        for (gegner in gegnerliste) {
+                            if (gegner is Schwaermer) {
+                                schwaermerVorhanden = true
+                                schwaermer = gegner
+                            }
+                        }
+                        if (schwaermerVorhanden) {
+                            gegner.schwaermerFressen(schwaermer)
                             schwaermerGefressen = true
                         }
                     }
                 }
                 4 -> {
-                    gegner.angreifen(heldenliste.random())
+                    gegner.angreifen(heldenliste[0])
                 }
                 5 -> {
                     gegner.verteidigen()
@@ -449,25 +470,24 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                 else -> {
                     gegner.heilen()
                 }
-            }       // Wählt den Unterboss aus
+            }
         }
 
         if (gegner is Schwaermer && !schwaermerGefressen && gegner.lebenspunkte() > 0) {
             // Wählt aus einer Liste eine zufällige Aktion und führt sie aus.
             val aktionen = listOf(
                 {
-                    println("Der Schwärmer versucht anzugreifen, es geht daneben.")
+                    println("${gegner.name} versucht anzugreifen, es geht daneben.")
                 },
                 {
                     val held: Held = heldenliste.random()
-                    println("Der Schwärmer greift ${held.name} an.")
+                    println("${gegner.name} greift ${held.name} an.")
                     gegner.angreifen(held)
                 },
                 {
                     gegner.feueratem(heldenliste)
                 },
                 {
-                    println("Testprintline")
                     val kriegerliste: MutableList<Krieger> = mutableListOf()
                     for (held in heldenliste) {
                         if (held is Krieger) {
@@ -478,7 +498,6 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                         val krieger: Krieger = kriegerliste.random()
                         if (krieger.schildVorhanden) {
                             gegner.schildEntreissen(krieger)
-                            println("${gegner.name} entreißt ${krieger.name} sein Schild!")
                         } else {
                             println("${gegner.name} hat versucht ${krieger.name} sein Schild zu entreißen!")
                             println("${krieger.name} hat aber kein Schild..")
@@ -487,8 +506,21 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                         println("${gegner.name} sucht nach einem Krieger um ihn sein Schild zu entreißen.")
                         println("Es gibt keine Krieger in der Heldengruppe.")
                     }
-                }
-            )
+                })
+
+            aktionen.random().invoke()
+        }
+
+        if (gegner is Ork) {
+            val aktionen: List<() -> Unit> = listOf(
+                {
+                    val held: Held = heldenliste.random()
+                    println("${gegner.name} greift ${held.name} an.")
+                    gegner.angreifen(held)
+                },
+                {
+                    gegner.verteidigen()
+                })
 
             aktionen.random().invoke()
         }
@@ -531,26 +563,34 @@ fun spielrunde(heldenliste: MutableList<Held>, gegnerliste: MutableList<Gegner>)
 
     val drache: Gegner = gegnerliste[0]
 
-    while (drache.lebenspunkte() > 0 && (held1.lebenspunkte() > 0 || held2.lebenspunkte() > 0 || held3.lebenspunkte() > 0)) {
+    var heldenGewonnen: Boolean = false
+    var dracheBesiegt: Boolean = false
+    while (gegnerliste.isNotEmpty() && (held1.lebenspunkte() > 0 || held2.lebenspunkte() > 0 || held3.lebenspunkte() > 0)) {
         kampfrunde(heldenliste, gegnerliste)
         ueberpruefeUndEntferneHeldGestorben(heldenliste)
 
-        if (drache.lebenspunkte() <= 0 && heldenliste.isNotEmpty()) {
-            if (drache.lebenspunkte() != 0) drache.lebenspunkteSetzen(0)
-            if (gegnerliste.size == 2) gegnerliste[1].lebenspunkteSetzen(0)
-            println("Der Drache wurde besiegt!")
-            lebenspunkteAusgabe(gegnerliste, heldenliste)
-            break
-        }
+//        if (drache.lebenspunkte() <= 0 && heldenliste.isNotEmpty() && !dracheBesiegt) {
+//            if (drache.lebenspunkte() != 0) drache.lebenspunkteSetzen(0)
+//            println("Der Drache wurde besiegt!")
+//            dracheBesiegt = true
+//        }
 
 
         if (heldenliste.isEmpty()) {
-            println("Der Drache hat alle Helden besiegt.")
+            println("Die Helden wurden besiegt.")
+            break
+        }
+
+        if (gegnerliste.isEmpty()) {
+            heldenGewonnen = true
+            println("Alle Gegner wurden besiegt!")
             break
         }
 
         lebenspunkteAusgabe(gegnerliste, heldenliste)
     }
+
+    if (heldenGewonnen) println("Die Helden haben gewonnen!")
 }
 
 fun ueberpruefeUndEntferneHeldGestorben(heldenliste: MutableList<Held>) {

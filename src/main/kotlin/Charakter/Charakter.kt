@@ -2,14 +2,15 @@ package Charakter
 
 import StatusEffekte.Buffs.*
 import StatusEffekte.Debuffs.*
+import Waffen.Waffe
 
 open class Charakter {
     // Name
     open var name: String = "Charakter"
 
     // Lebenspunkte und maximale Lebenspunkte
-    protected open var lp: Int = 100
     protected open var maxlp: Int = 100
+    protected open var lp: Int = 100
 
     // Attribute für Heilung, Schaden und Verteidigung
     open var staerke: Int = (10..20).random()
@@ -20,9 +21,13 @@ open class Charakter {
     val buffs: MutableList<Buff> = mutableListOf()
     val debuffs: MutableList<Debuff> = mutableListOf()
 
+    // Ausrüstung
+    var waffenTyp: Waffe = Waffe("Unbewaffnet")
+
     open fun schadenNehmen(schaden: Int): Int {
         var gesamtschaden: Int = schaden-(ausdauer / 10)
         if (gesamtschaden < 0) gesamtschaden = 0
+        if (gesamtschaden > lp) gesamtschaden = lp
         lp -= gesamtschaden
         return gesamtschaden
     }
@@ -42,6 +47,10 @@ open class Charakter {
 
     fun lebenspunkte(): Int {
         return this.lp
+    }
+
+    fun maxLebenspunkteSetzen(wert:Int) {
+        this.maxlp = wert
     }
 
     fun maxLebenspunkte(): Int {

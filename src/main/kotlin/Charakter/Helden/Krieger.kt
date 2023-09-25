@@ -8,7 +8,7 @@ import sichereEingabe
 
 class Krieger(name: String): Held(name) {
     // Klassenspezifische Attribute
-    var wut: Int = 0 // Bisher ungenutzt bzw.
+    var wut: Int = 0 // Bisher ungenutzt bzw. ohne Auffüllung
     var schildVorhanden: Boolean = true
 
     // Lebenspunkte und maximale Lebenspunkte
@@ -19,15 +19,22 @@ class Krieger(name: String): Held(name) {
     override var staerke: Int = (20..30).random()
     override var ausdauer: Int = (20..30).random()
 
+    override fun schadenNehmen(schaden: Int): Int {
+        var gesamtschaden: Int = super.schadenNehmen(schaden)
+        if (100-wut <= 0) gesamtschaden = 0
+        wut += gesamtschaden
+        return gesamtschaden
+    }
+
     override fun angreifen(gegner: Gegner): Boolean {
         println("${this.name} holt zum Angriff aus!")
         Thread.sleep(1000)
-        var maxSchaden: Int = staerke
+        val maxSchaden: Int = staerke
         var schaden: Int
-        if (waffenTyp.name.lowercase() != "unbewaffnet") {
-            schaden = (0..maxSchaden).random() + (wut / 2)
+        schaden = if (waffenTyp.name.lowercase() != "unbewaffnet") {
+            (0..maxSchaden).random() + (wut / 2)
         } else {
-            schaden = (0..maxSchaden).random()
+            (0..maxSchaden).random()
         }
 
         if (schaden > 50) schaden = 50

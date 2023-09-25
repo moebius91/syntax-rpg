@@ -6,10 +6,14 @@ import schadenAnwendenUndBerichten
 
 open class Drache: Gegner() {
     // Name
-    override var name: String = listOf("Großer Smaragddrache", "Schwarzer Totenkopfdrache").random()
+    override var name: String = listOf(
+        "Großer Smaragddrache",
+        "Schwarzer Totenkopfdrache",
+        "Gefährlicher Horndrache",
+        "Atlantischer Riesendrache").random()
 
     // Lebenspunkte und maximale Lebenspunkte
-    override var lp: Int = (300..350).random()
+    override var lp: Int = (100..150).random()
     override var maxlp: Int = lp
 
     // Attribute für Heilung, Schaden und Verteidigung
@@ -21,8 +25,21 @@ open class Drache: Gegner() {
         println("${this.name} holt zum Angriff aus!")
         Thread.sleep(1000)
         var maxSchaden: Int = staerke
-        var schaden: Int = listOf((30..maxSchaden).random(), 0).random()
-        schadenAnwendenUndBerichten(this,schaden, maxSchaden, held)
+        var schaden: Int = listOf(((maxSchaden/2)..maxSchaden).random(), 0).random()
+        var schildGebrauch: Boolean = false
+        if (held.buffs.isNotEmpty()) {
+            for (buff in held.buffs) {
+                if (buff.name == "SchildGebrauch") {
+                    schildGebrauch = true
+                }
+            }
+        }
+
+        if (!schildGebrauch) {
+            schadenAnwendenUndBerichten(this, schaden, maxSchaden, held)
+        } else {
+            println("${held.name} widersteht dem Angriff hinter seinem Schild!")
+        }
     }
     open fun feueratem(heldenliste: List<Held>) {
         val schaden: Int = (50..100).random() / 3
@@ -59,6 +76,7 @@ open class Drache: Gegner() {
         println("${this.name} frisst ${schwaermer.name}.")
         println("${this.name} erhöht seine maximalen LP von ${this.maxlp} auf ${(this.maxlp*1.5).toInt()}")
         this.maxlp = (this.maxlp*1.5).toInt()
+        lp = maxlp
     }
 
     fun heilen(){

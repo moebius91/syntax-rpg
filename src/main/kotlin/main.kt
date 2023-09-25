@@ -14,6 +14,7 @@ fun main() {
     // Instanziiert den Endgegner
     val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
 
+
     // Startet das Spiel bis entweder der Endgegner oder die Helden tot sind.
     spielrunde(heldenliste,gegnerliste)
 
