@@ -13,7 +13,7 @@ open class Drache: Gegner() {
         "Atlantischer Riesendrache").random()
 
     // Lebenspunkte und maximale Lebenspunkte
-    override var lp: Int = (100..150).random()
+    override var lp: Int = (300..350).random()
     override var maxlp: Int = lp
 
     // Attribute für Heilung, Schaden und Verteidigung
