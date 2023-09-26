@@ -4,7 +4,7 @@ import charakter.Charakter
 
 class Streitkolben: Waffe("Streitkolben") {
     val staerke: Int = (10..20).random()
-    val ausdauer: Int = (10..20).random()
+    val ausdauer: Int = staerke + 10
 
     override fun anlegen(charakter: Charakter){
         charakter.staerke += staerke
