@@ -1,7 +1,7 @@
 package charakter
 
-import statuseffekte.buffs.*
-import statuseffekte.debuffs.*
+import statuseffekte.buffs.Buff
+import statuseffekte.debuffs.Debuff
 import waffen.Waffe
 
 open class Charakter {
@@ -26,6 +26,14 @@ open class Charakter {
 
     open fun schadenNehmen(schaden: Int): Int {
         var gesamtschaden: Int = schaden-(ausdauer / 10)
+        if (gesamtschaden < 0) gesamtschaden = 0
+        if (gesamtschaden > lp) gesamtschaden = lp
+        lp -= gesamtschaden
+        return gesamtschaden
+    }
+
+    open fun schadenDirektNehmen(schaden: Int): Int {
+        var gesamtschaden: Int = schaden
         if (gesamtschaden < 0) gesamtschaden = 0
         if (gesamtschaden > lp) gesamtschaden = lp
         lp -= gesamtschaden

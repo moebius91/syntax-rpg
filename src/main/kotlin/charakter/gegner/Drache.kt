@@ -1,8 +1,8 @@
 package charakter.gegner
 
 import charakter.helden.Held
-import statuseffekte.debuffs.FluchDesDrachen
 import schadenAnwendenUndBerichten
+import statuseffekte.debuffs.FluchDesDrachen
 
 open class Drache: Gegner() {
     // Name
@@ -13,7 +13,7 @@ open class Drache: Gegner() {
         "Atlantischer Riesendrache").random()
 
     // Lebenspunkte und maximale Lebenspunkte
-    override var lp: Int = (300..350).random()
+    override var lp: Int = (500..650).random()
     override var maxlp: Int = lp
 
     // Attribute für Heilung, Schaden und Verteidigung
@@ -38,12 +38,12 @@ open class Drache: Gegner() {
         if (!schildGebrauch) {
             schadenAnwendenUndBerichten(this, schaden, maxSchaden, held)
         } else {
-            println("${held.name} widersteht dem Angriff hinter seinem Schild!")
+            println("${held.name} widersteht dem Angriff hinter seinem Schild!\n")
         }
     }
     open fun feueratem(heldenliste: List<Held>) {
         val schaden: Int = (50..100).random() / 3
-        println("Der Feueratem des Drachen trifft alle Helden!")
+        println("Der Feueratem des Drachen trifft alle Helden!\n")
 
 
         for (held in heldenliste) {
@@ -63,18 +63,18 @@ open class Drache: Gegner() {
     fun fluchDesDrachen(heldenliste: List<Held>) {
         val zahl: Int = (0..2).random()
         val held: Held = heldenliste[zahl]
-        println("Der Fluch des Drachen trifft: ${held.name}.")
+        println("Der Fluch des Drachen trifft: ${held.name}.\n")
         held.debuffs.add(FluchDesDrachen(held))
     }
 
     fun schwaermerBeschwoeren(gegnerliste: MutableList<Gegner>): Schwaermer {
-        println("Ein Schwärmer wird beschworen!")
+        println("Ein Schwärmer wird beschworen!\n")
         return Schwaermer()
     }
 
     open fun schwaermerFressen(schwaermer: Schwaermer) {
         println("${this.name} frisst ${schwaermer.name}.")
-        println("${this.name} erhöht seine maximalen LP von ${this.maxlp} auf ${(this.maxlp*1.5).toInt()}")
+        println("${this.name} erhöht seine maximalen LP von ${this.maxlp} auf ${(this.maxlp*1.5).toInt()}\n")
         this.maxlp = (this.maxlp*1.5).toInt()
         lp = maxlp
     }

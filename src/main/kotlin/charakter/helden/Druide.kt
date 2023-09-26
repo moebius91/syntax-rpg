@@ -61,7 +61,8 @@ class Druide(name: String): Held(name) {
         }
         val eingabe: Int = sichereEingabe(zaehler) -1
         val held: Held = heldenliste[eingabe]
-        val heilung: Int = held.heilungErfahren(maxLebenspunkte() / 10)
+        val heilwert: Int = (held.maxLebenspunkte() /10..held.maxLebenspunkte() /2).random()
+        val heilung: Int = held.heilungErfahren(heilwert)
         println("${held.name} wurde um ${heilung} Lebenspunkte geheilt.\n")
         return true
     }

@@ -17,7 +17,7 @@ open class Gegner(override var lp: Int = 100): Charakter() {
     }
 
     open fun verteidigen() {
-        println("${this.name} sieht aus, als würde es einen Angriff erwarten!")
+        println("${this.name} sieht aus, als würde es einen Angriff erwarten!\n")
         // TODO("Buff hinzufügen der die Verteidigung kurzzeitig erhöht.")
     }
 }

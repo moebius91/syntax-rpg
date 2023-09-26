@@ -137,11 +137,13 @@ fun charakterMenue(held: Held, gegner: Gegner, heldenliste: List<Held>): Boolean
  */
 
 fun lebenspunkteAusgabe(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
+    println("Lebenspunkte Gegner:")
     if (gegnerliste.isNotEmpty()) {
         for (gegner in gegnerliste) {
             println("${gegner.name}: ${gegner.lebenspunkte()}/${gegner.maxLebenspunkte()}")
         }
     }
+    println("\nLebenspunkte Helden:")
     if (heldenliste.isNotEmpty()) {
         for (held in heldenliste) {
             println("${held.name}: ${held.lebenspunkte()}/${held.maxLebenspunkte()}")
@@ -397,10 +399,6 @@ fun kampfrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>){
  */
 
 fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
-    // Generiert eine zufällige Zahl, welche die Attacke des
-    // Endgegners bestimmt.
-    val zufallszahl: Int = (1..6).random()
-
     // Zwischenspeicher für den möglichen Unterboss um
     // ihn hinzuzufügen oder zu entfernen.
     var speicher: Gegner? = null
@@ -445,7 +443,6 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     val held: Held = heldenliste.random()
                     println("${gegner.name} greift ${held.name} an.")
                     gegner.angreifen(held)
-                    println()
                 },
                 {
                     // Aktion 5 mit 10%
@@ -464,13 +461,12 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
             val wahrscheinlichkeiten: List<Int> = listOf(10,70,15,5)
             val aktionen = listOf(
                 {
-                    println("${gegner.name} versucht anzugreifen, es geht daneben.")
+                    println("${gegner.name} versucht anzugreifen, es geht daneben.\n")
                 },
                 {
                     val held: Held = heldenliste.random()
                     println("${gegner.name} greift ${held.name} an.")
                     gegner.angreifen(held)
-                    println()
                 },
                 {
                     gegner.feueratem(heldenliste)
@@ -488,11 +484,11 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                             gegner.schildEntreissen(krieger)
                         } else {
                             println("${gegner.name} hat versucht ${krieger.name} sein Schild zu entreißen!")
-                            println("${krieger.name} hat aber kein Schild..")
+                            println("${krieger.name} hat aber kein Schild..\n")
                         }
                     } else {
                         println("${gegner.name} sucht nach einem Krieger um ihn sein Schild zu entreißen.")
-                        println("Es gibt keine Krieger in der Heldengruppe.")
+                        println("Es gibt keine Krieger in der Heldengruppe.\n")
                     }
                 })
             waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten, aktionen)
@@ -505,7 +501,6 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     val held: Held = heldenliste.random()
                     println("${gegner.name} greift ${held.name} an.")
                     gegner.angreifen(held)
-                    println()
                 },
                 {
                     gegner.verteidigen()

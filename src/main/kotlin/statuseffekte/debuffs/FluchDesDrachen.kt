@@ -11,7 +11,7 @@ class FluchDesDrachen(held: Held): Debuff(held) {
 
     override fun schaden(charakter: Charakter) {
         if (!abgeklungen && charakter.lebenspunkte() > charakter.maxLebenspunkte()/5) {
-            charakter.schadenNehmen(charakter.maxLebenspunkte() / 10)
+            charakter.schadenDirektNehmen(charakter.maxLebenspunkte() / 10)
         } else {
             abgeklungen = true
         }

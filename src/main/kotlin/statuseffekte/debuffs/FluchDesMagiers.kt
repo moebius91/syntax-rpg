@@ -10,7 +10,7 @@ class FluchDesMagiers(gegner: Gegner): Debuff(gegner) {
 
     override fun schaden(charakter: Charakter) {
         if (!abgeklungen && charakter.lebenspunkte() > 0) {
-            charakter.schadenNehmen(charakter.maxLebenspunkte() / 20)
+            charakter.schadenDirektNehmen(charakter.maxLebenspunkte() / 20)
         } else {
             abgeklungen = true
         }

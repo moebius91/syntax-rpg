@@ -2,10 +2,12 @@ package charakter.helden
 
 import charakter.Charakter
 import charakter.gegner.Gegner
-import items.*
-import waffen.*
+import items.Item
 import schadenAnwendenUndBerichten
 import sichereEingabe
+import waffen.Dolch
+import waffen.Schwert
+import waffen.Waffe
 
 open class Held(override var name:String): Charakter() {
     // Erfahrungspunkte
@@ -33,7 +35,7 @@ open class Held(override var name:String): Charakter() {
     }
 
     open fun verteidigen(): Boolean {
-        println("${this.name} reißt sich seine Arme vors Gesicht.")
+        println("${this.name} reißt sich seine Arme vors Gesicht.\n")
         return true
     }
 

@@ -1,6 +1,9 @@
 package charakter.gegner
 
-import waffen.*
+import waffen.Axt
+import waffen.Dolch
+import waffen.Schwert
+import waffen.Streitkolben
 
 class Ork: Gegner() {
     // Name
@@ -21,7 +24,7 @@ class Ork: Gegner() {
     }
 
     override fun verteidigen() {
-        println("${this.name} sieht aus, als würde er einen Angriff erwarten!")
+        println("${this.name} sieht aus, als würde er einen Angriff erwarten!\n")
         // TODO("Buff hinzufügen der die Verteidigung kurzzeitig erhöht.")
     }
 }
