@@ -1,21 +1,28 @@
-import charakter.gegner.*
-import charakter.helden.*
+
+import charakter.gegner.Gegner
+import charakter.helden.Druide
+import charakter.helden.Held
+import charakter.helden.Krieger
+import charakter.helden.Magier
+import level.Level
+import level.Verlies
 
 fun main() {
-    // Instanziieren der Helden + Endgegner
+    // Verpacken der Charaktere in jeweilige Listen
+    val heldenliste: MutableList<Held> = testHelden()
+
+    // Testen der Levelklasse
+    val level: Level = Verlies(heldenliste)
+    level.spielrunde()
+}
+
+fun testHelden(): MutableList<Held> {
     val held1: Krieger = Krieger("Krieger")
     val held2: Druide = Druide("Druide")
     val held3: Magier = Magier("Magier")
-
-    // Verpacken der Charaktere in jeweilige Listen
-    val heldenliste: MutableList<Held> = mutableListOf(held1, held2, held3)
-    val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
-    gegnerliste.add(Ork())
-    gegnerliste.add(Schwaermer())
-
-    // Inventar für die Helden anlegen
+    val heldenliste = mutableListOf(held1, held2, held3)
     heldenteamInventareAnlegen(heldenliste)
-    spielrunde(heldenliste,gegnerliste)
+    return heldenliste
 }
 
 

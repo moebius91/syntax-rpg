@@ -1,5 +1,5 @@
-import charakter.gegner.*
-import charakter.helden.*
+import charakter.gegner.Gegner
+import charakter.helden.Held
 
 fun main() {
     // Spielbegrüßung
@@ -17,5 +17,4 @@ fun main() {
 
     // Startet das Spiel bis entweder der Endgegner oder die Helden tot sind.
     spielrunde(heldenliste,gegnerliste)
-
 }

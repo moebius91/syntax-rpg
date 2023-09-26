@@ -1,26 +1,26 @@
 package charakter.gegner
 
-import waffen.Axt
 import waffen.Dolch
 import waffen.Schwert
-import waffen.Streitkolben
 
-class Ork: Gegner() {
+class Goblin: Gegner() {
     // Name
-    override var name: String = "Ork"
+    override var name: String = "Goblin"
 
     // Lebenspunkte unt maximale Lebenspunkte
-    override var maxlp: Int = 120
-    override var lp: Int = 120
+    override var maxlp: Int = 70
+    override var lp: Int = 70
 
-    override var intelligenz: Int = (1..10).random()
+    override var staerke: Int = (10..30).random()
+    override var ausdauer: Int = (5..20).random()
+    override var intelligenz: Int = (1..5).random()
 
     init {
         this.waehleWaffe()
         waffenTyp.anlegen(this)
     }
     fun waehleWaffe() {
-        this.waffenTyp = listOf(Schwert(),Dolch(),Axt(),Streitkolben()).random()
+        this.waffenTyp = listOf(Schwert(), Dolch()).random()
     }
 
     override fun verteidigen() {
