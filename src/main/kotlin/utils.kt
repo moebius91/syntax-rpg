@@ -6,6 +6,7 @@ import items.Heiltrank
 import items.Vitamine
 import statuseffekte.buffs.Buff
 import statuseffekte.debuffs.Debuff
+import statuseffekte.debuffs.SchildVerlieren
 
 /**
  * Liest eine Ganzzahl vom Benutzer ein und stellt sicher, dass sie innerhalb eines bestimmten Bereichs liegt.
@@ -481,6 +482,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
                     if (kriegerliste.isNotEmpty()) {
                         val krieger: Krieger = kriegerliste.random()
                         if (krieger.schildVorhanden) {
+                            krieger.debuffs.add(SchildVerlieren(krieger))
                             gegner.schildEntreissen(krieger)
                         } else {
                             println("${gegner.name} hat versucht ${krieger.name} sein Schild zu entreißen!")
