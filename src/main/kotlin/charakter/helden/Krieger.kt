@@ -1,10 +1,11 @@
 package charakter.helden
 
 import charakter.gegner.Gegner
-import statuseffekte.buffs.SchildGebrauch
-import waffen.*
 import schadenAnwendenUndBerichten
 import sichereEingabe
+import statuseffekte.buffs.SchildGebrauch
+import waffen.Axt
+import waffen.Schwert
 
 class Krieger(name: String): Held(name) {
     // Klassenspezifische Attribute
@@ -45,9 +46,9 @@ class Krieger(name: String): Held(name) {
     override fun verteidigen(): Boolean {
         if (schildVorhanden) {
             this.buffs.add(SchildGebrauch(this))
-            println("${this.name} schützt sich mit seinem Schild.")
+            println("${this.name} schützt sich mit seinem Schild.\n")
         } else {
-            println("${this.name} reißt sich seine Hände vors Gesicht.")
+            println("${this.name} reißt sich seine Hände vors Gesicht.\n")
         }
 
         return true

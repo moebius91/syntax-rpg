@@ -1,10 +1,13 @@
 package charakter.helden
 
 import charakter.gegner.Gegner
-import statuseffekte.debuffs.FluchDesMagiers
-import waffen.*
 import schadenAnwendenUndBerichten
 import sichereEingabe
+import statuseffekte.debuffs.FluchDesMagiers
+import waffen.Dolch
+import waffen.Schwert
+import waffen.Stab
+import waffen.Zauberstab
 
 class Magier(name: String): Held(name) {
     // Klassenspezifische Attribute
@@ -40,12 +43,12 @@ class Magier(name: String): Held(name) {
             if (debuff.name == "FluchDesMagiers") {
                 debuff.dauerRunde = 3
                 vorhanden = true
-                println("Der Fluch des Magiers hält wieder 3 Runden.")
+                println("Der Fluch des Magiers hält wieder 3 Runden.\n")
             }
         }
 
         if (!vorhanden) {
-            println("${gegner.name} wird mit dem Fluch des Magiers belegt für 3 Runden.")
+            println("${gegner.name} wird mit dem Fluch des Magiers belegt für 3 Runden.\n")
             gegner.debuffs.add(FluchDesMagiers(gegner))
         }
 

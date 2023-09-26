@@ -1,3 +1,4 @@
+
 import charakter.Charakter
 import charakter.gegner.*
 import charakter.helden.*
@@ -5,7 +6,6 @@ import items.Heiltrank
 import items.Vitamine
 import statuseffekte.buffs.Buff
 import statuseffekte.debuffs.Debuff
-import kotlin.Exception
 
 /**
  * Liest eine Ganzzahl vom Benutzer ein und stellt sicher, dass sie innerhalb eines bestimmten Bereichs liegt.
@@ -46,19 +46,19 @@ fun schadenAnwendenUndBerichten(angreifer: Charakter, schaden: Int, maxSchaden:I
     when (val echterSchaden: Int = gegner.schadenNehmen(schaden)) {
         0 -> {
             if (schaden == 0) {
-                println("${angreifer.name} hat nicht getroffen..")
+                println("${angreifer.name} hat nicht getroffen..\n")
             } else {
-                println("${angreifer.name} hat keinen Schaden verursacht..")
+                println("${angreifer.name} hat keinen Schaden verursacht..\n")
             }
         }
         in 1.. zahl1 -> {
-            println("${angreifer.name} hat geringen Schaden verursacht.. ($echterSchaden)")
+            println("${angreifer.name} hat geringen Schaden verursacht.. ($echterSchaden)\n")
         }
         in 11 .. zahl2 -> {
-            println("${angreifer.name} hat Schaden verursacht. ($echterSchaden)")
+            println("${angreifer.name} hat Schaden verursacht. ($echterSchaden)\n")
         }
         else -> {
-            println("${angreifer.name} hat großen Schaden verursacht! ($echterSchaden)")
+            println("${angreifer.name} hat großen Schaden verursacht! ($echterSchaden)\n")
         }
     }
 }
@@ -547,7 +547,6 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
 
 fun spielrunde(heldenliste: MutableList<Held>, gegnerliste: MutableList<Gegner>) {
     var heldenGewonnen: Boolean = false
-    var dracheBesiegt: Boolean = false
     while (gegnerliste.isNotEmpty() && heldenliste.isNotEmpty()) {
         kampfrunde(heldenliste, gegnerliste)
         ueberpruefeUndEntferneHeldGestorben(heldenliste)
