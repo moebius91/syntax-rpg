@@ -1,13 +1,9 @@
 package charakter.helden
 
 import charakter.gegner.Gegner
-import schadenAnwendenUndBerichten
-import sichereEingabe
 import statuseffekte.debuffs.FluchDesMagiers
-import waffen.Dolch
-import waffen.Schwert
-import waffen.Stab
-import waffen.Zauberstab
+import waffen.*
+import utils.*
 
 class Magier(name: String): Held(name) {
     // Klassenspezifische Attribute

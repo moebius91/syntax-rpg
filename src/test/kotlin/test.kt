@@ -1,19 +1,21 @@
 
 import charakter.gegner.Gegner
-import charakter.gegner.Schwaermer
 import charakter.helden.Druide
 import charakter.helden.Held
 import charakter.helden.Krieger
 import charakter.helden.Magier
+import level.Level
+import level.Verlies
+import utils.heldenteamInventareAnlegen
+import utils.inventarAnlegen
 
 fun main() {
     // Verpacken der Charaktere in jeweilige Listen
     val heldenliste: MutableList<Held> = testHelden()
 
     // Testen der Levelklasse
-    //val level: Level = Verlies(heldenliste)
-    val gegnerliste: MutableList<Gegner> = mutableListOf(Schwaermer())
-    spielrunde(heldenliste,gegnerliste)
+    val level: Level = Verlies(heldenliste)
+    level.spielrunde()
 }
 
 fun testHelden(): MutableList<Held> {

@@ -1,11 +1,9 @@
 package charakter.helden
 
 import charakter.gegner.Gegner
-import schadenAnwendenUndBerichten
-import sichereEingabe
 import statuseffekte.buffs.SchildGebrauch
-import waffen.Axt
-import waffen.Schwert
+import waffen.*
+import utils.*
 
 class Krieger(name: String): Held(name) {
     // Klassenspezifische Attribute

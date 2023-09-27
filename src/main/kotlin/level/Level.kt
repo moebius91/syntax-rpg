@@ -2,14 +2,10 @@ package level
 
 import charakter.gegner.*
 import charakter.helden.Held
-import erstelleLauftext
-import kampfrunde
-import lebenspunkteAusgabe
-import sekundenschlaf
-import ueberpruefeUndEntferneHeldGestorben
+import utils.*
 
 open class Level(val heldenliste: MutableList<Held>) {
-    val gegnerliste: MutableList<Gegner> = mutableListOf()
+    val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
 
     init {
         zufaelligeGegner()
@@ -21,7 +17,6 @@ open class Level(val heldenliste: MutableList<Held>) {
     }
 
     protected open fun zufaelligeGegner() {
-        gegnerliste.add(Drache())
         val zufallszahl: Int = (0..2).random()
         repeat(zufallszahl) {
             val zufallsGegner: Gegner = listOf(Schwaermer(), Ork()).random()
@@ -31,7 +26,7 @@ open class Level(val heldenliste: MutableList<Held>) {
     }
 
     protected fun gegnerAnzeigen() {
-        erstelleLauftext("\nZur Zeit halten sich hier folgende Monster auf:\n")
+        erstelleLauftext("\nZur Zeit halten sich hier folgende Gegner auf:\n")
         sekundenschlaf()
         var zaehler: Int = 1
         for (gegner in gegnerliste) {
@@ -49,12 +44,13 @@ open class Level(val heldenliste: MutableList<Held>) {
 
     fun spielrunde() {
         var heldenGewonnen: Boolean = false
-        var endgegner: Drache = Drache()
+        var endgegner: Drache = gegnerliste[0] as Drache
         var goblins: Boolean = false
-        for (gegner in gegnerliste) {
-            if (gegner is Drache) endgegner = gegner
-        }
+
         while (gegnerliste.isNotEmpty() && heldenliste.isNotEmpty()) {
+            var zaehler: Int = 1
+            textAusgabeZwischenDenRunden(zaehler)
+            zaehler++
             kampfrunde(heldenliste, gegnerliste)
             ueberpruefeUndEntferneHeldGestorben(heldenliste)
 
@@ -80,5 +76,25 @@ open class Level(val heldenliste: MutableList<Held>) {
         }
 
         println(if (heldenGewonnen) "Die Helden haben gewonnen!" else "Spiel verloren.")
+    }
+
+    protected open fun textAusgabeZwischenDenRunden(zaehler: Int) {
+        when (zaehler) {
+            1 -> {
+                println("Runde: $zaehler beginnt.")
+            }
+            2 -> {
+                println("Runde: $zaehler beginnt.")
+            }
+            3 -> {
+                println("Runde: $zaehler beginnt.")
+            }
+            4 -> {
+                println("Runde: $zaehler beginnt.")
+            }
+            else -> {
+                println("Runde: $zaehler beginnt.")
+            }
+        }
     }
 }

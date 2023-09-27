@@ -1,5 +1,6 @@
 import charakter.gegner.Gegner
 import charakter.helden.Held
+import utils.*
 
 fun main() {
     // Spielbegrüßung

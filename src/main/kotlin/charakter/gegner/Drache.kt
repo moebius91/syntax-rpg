@@ -1,8 +1,9 @@
 package charakter.gegner
 
 import charakter.helden.Held
-import schadenAnwendenUndBerichten
+import statuseffekte.buffs.SchildGebrauch
 import statuseffekte.debuffs.FluchDesDrachen
+import utils.*
 
 open class Drache: Gegner() {
     // Name
@@ -24,16 +25,9 @@ open class Drache: Gegner() {
     override fun angreifen(held: Held) {
         println("${this.name} holt zum Angriff aus!")
         Thread.sleep(1000)
-        var maxSchaden: Int = staerke
-        var schaden: Int = listOf(((maxSchaden/2)..maxSchaden).random(), 0).random()
-        var schildGebrauch: Boolean = false
-        if (held.buffs.isNotEmpty()) {
-            for (buff in held.buffs) {
-                if (buff.name == "SchildGebrauch") {
-                    schildGebrauch = true
-                }
-            }
-        }
+        val maxSchaden: Int = staerke
+        val schaden: Int = gegnerischerSchadenBerechnen(maxSchaden)
+        val schildGebrauch: Boolean = buffsVorAngriffPruefen(held, SchildGebrauch(held).name)
 
         if (!schildGebrauch) {
             schadenAnwendenUndBerichten(this, schaden, maxSchaden, held)

@@ -1,10 +1,8 @@
 package charakter.helden
 
 import charakter.gegner.Gegner
-import schadenAnwendenUndBerichten
-import sichereEingabe
-import waffen.Stab
-import waffen.Streitkolben
+import waffen.*
+import utils.*
 
 class Druide(name: String): Held(name) {
     // Klassenspezifische Attribute

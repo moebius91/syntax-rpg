@@ -2,7 +2,7 @@ package charakter.gegner
 
 import charakter.Charakter
 import charakter.helden.Held
-import schadenAnwendenUndBerichten
+import utils.*
 
 open class Gegner(override var lp: Int = 100): Charakter() {
     // Name

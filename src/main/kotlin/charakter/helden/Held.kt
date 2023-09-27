@@ -3,11 +3,8 @@ package charakter.helden
 import charakter.Charakter
 import charakter.gegner.Gegner
 import items.Item
-import schadenAnwendenUndBerichten
-import sichereEingabe
-import waffen.Dolch
-import waffen.Schwert
-import waffen.Waffe
+import waffen.*
+import utils.*
 
 open class Held(override var name:String): Charakter() {
     // Erfahrungspunkte
