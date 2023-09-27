@@ -2,8 +2,11 @@ package items
 
 import charakter.helden.Held
 
-open class Item(var name: String = "Unbekanntes Item", val verbrauchbar: Boolean = true) {
+open class Item(var name: String = "Unbekanntes Item", private val verbrauchbar: Boolean = true) {
     val zahl: Int = (0..6).random()
+
+    constructor(verbrauchbar: Boolean): this("Unbekanntes Item", verbrauchbar)
+
     open var beschreibung: String = "Ein Dir unbekanntes Item."
     open fun benutzen(held: Held): Boolean {
         when (zahl) {
