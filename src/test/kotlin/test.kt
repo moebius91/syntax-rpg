@@ -1,13 +1,8 @@
 
 import charakter.gegner.Gegner
-import charakter.helden.Druide
-import charakter.helden.Held
-import charakter.helden.Krieger
-import charakter.helden.Magier
-import level.Level
-import level.Verlies
-import utils.heldenteamInventareAnlegen
-import utils.inventarAnlegen
+import charakter.helden.*
+import level.*
+import utils.*
 
 fun main() {
     // Verpacken der Charaktere in jeweilige Listen

@@ -8,25 +8,25 @@ open class Item(var name: String = "Unbekanntes Item", val verbrauchbar: Boolean
     open fun benutzen(held: Held): Boolean {
         when (zahl) {
             0 -> {
-                println("Nichts passiert.")
+                println("Nichts passiert.\n")
             }
             1 -> {
-                println("Deine Schuhe sind jetzt grün.")
+                println("Deine Schuhe sind jetzt grün.\n")
             }
             2 -> {
-                println("Du weißt nicht, wie man dieses Item benutzt.")
+                println("Du weißt nicht, wie man dieses Item benutzt.\n")
             }
             3 -> {
-                println("Dies gehört Dir nicht.")
+                println("Dies gehört Dir nicht.\n")
             }
             4 -> {
-                println("Der Himmel färbt sich rot.")
+                println("Der Himmel färbt sich rot.\n")
             }
             5 -> {
-                println("Es ist kaputt.")
+                println("Es ist kaputt.\n")
             }
             6 -> {
-                println("Ein Huhn sitzt auf Deinem Kopf.")
+                println("Ein Huhn sitzt auf Deinem Kopf.\n")
             }
         }
         return true

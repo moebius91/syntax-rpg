@@ -26,35 +26,55 @@ fun kampfrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>){
     buffsDebuffsEntfernen(heldenliste)
 }
 
-fun gegnerischerSchadenBerechnen(maxSchaden: Int): Int {
-    val range: IntRange = ((maxSchaden/2)..maxSchaden)
-    var listeSchaden: MutableList<Int> = mutableListOf(0)
-    for (zahl in range) {
-        listeSchaden.add(zahl)
+/**
+ * Führt einen Spielzug für jedes Held-Objekt in der gegebenen Liste aus.
+ * Wendet zuerst alle aktiven Buffs und Debuffs auf den Helden an, dann führt der Held einen Zug gegen einen zufällig ausgewählten Gegner aus.
+ *
+ * @param heldenliste Die Liste der Held-Objekte, für die ein Zug ausgeführt werden soll.
+ * @param gegnerliste Die Liste der verfügbaren Gegner-Objekte.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
+ */
+
+fun heldenzug(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
+    for (held in heldenliste) {
+        // Überprüft ob Gegner tot sind und entfernt sie.
+        toteGegnerEntfernen(gegnerliste)
+        // Überprüft ob der Endgegner gefallen ist und beendet den Heldenzug
+        if (gegnerliste.isEmpty()) break
+        buffsDebuffsAnwenden(held)
+
+        val gegner: Gegner = gegnerAuswahl(held, gegnerliste)
+        var bedingung: Boolean = false
+        while(!bedingung && held.lebenspunkte() > 0 && gegnerliste.isNotEmpty()) {
+            bedingung = charakterMenue(held,gegner,heldenliste)
+        }
     }
-    return listeSchaden.random()
 }
 
 /**
- * Mit Hilfe von ChatGPT erstellte Funktion, um Aktionen mit einer
- * bestimmten Wahrscheinlichkeit auszuführen.
+ * Ermöglicht dem Spieler, einen Gegner aus der Liste der verfügbaren Gegner auszuwählen.
+ * Falls nur ein Gegner vorhanden ist, wird dieser automatisch ausgewählt.
  *
- * @param wahrscheinlichkeiten Erwartet eine Liste mit Wahrscheinlichkeiten in Prozent
- * @param aktionen Erwartet eine Liste mit Lambda-Funktionen.
+ * @param held Das Held-Objekt, das einen Gegner auswählen wird.
+ * @param gegnerliste Die Liste der verfügbaren Gegner.
+ * @return Gibt das Gegner-Objekt zurück, das ausgewählt wurde.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten: List<Int>, aktionen: List<() -> Unit>) {
-    if (wahrscheinlichkeiten.size != aktionen.size) throw IllegalArgumentException("Du hast eine ungleiche Anzahl von Wahrscheinlichkeiten zu Aktionen übergeben!")
-    if (wahrscheinlichkeiten.sum() != 100) throw IllegalArgumentException("Du hast Wahrscheinlichkeiten mit weniger oder mehr als 100% in Summe übergeben!")
-    val zufallszahl: Int = (1..100).random()
-    var sum: Int = 0
-
-    for (i in wahrscheinlichkeiten.indices) {
-        sum += wahrscheinlichkeiten[i]
-        if (zufallszahl < sum) {
-            aktionen[i].invoke()
-            break
+fun gegnerAuswahl(held: Held, gegnerliste: MutableList<Gegner>): Gegner {
+    return if (gegnerliste.size == 1) {
+        gegnerliste[0]
+    } else {
+        println("${held.name}, welchen Gegner willst Du in der nächsten Runde angreifen?")
+        var zaehler: Int = 0
+        for (gegner in gegnerliste) {
+            zaehler++
+            println("$zaehler. ${gegner.name}")
         }
+        val eingabe: Int = sichereEingabe(zaehler) -1
+        gegnerliste[eingabe]
     }
 }
 
@@ -82,10 +102,29 @@ fun ueberpruefeUndEntferneHeldGestorben(heldenliste: MutableList<Held>) {
 }
 
 /**
- * Bereinigt die Gegnerliste von 'Schwaermer'-Gegnern mit negativen Lebenspunkten, um eine korrekte Spiellogik zu gewährleisten.
- * Diese Funktion stellt sicher, dass keine Gegner mit negativen Lebenspunkten in der Liste verbleiben, indem sie die Lebenspunkte auf 0 setzt und sie aus der Liste entfernt.
+ * Berechnet den Schaden, den ein Gegner anrichtet, basierend auf einem maximalen Schadenswert.
+ * Der Schaden ist zufällig und kann entweder 0 oder ein Wert im Bereich von der Hälfte des maximalen Schadens bis zum maximalen Schaden sein.
  *
- * @param gegnerliste Die Liste von Gegner-Objekten, in der tote 'Schwaermer' korrigiert und entfernt werden sollen.
+ * @param maxSchaden Der maximale Schaden, den der Gegner anrichten kann.
+ * @return Gibt einen zufälligen Schadenswert zurück, der entweder 0 oder im Bereich von der Hälfte des maximalen Schadens bis zum maximalen Schaden liegt.
+ *
+ * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
+ */
+
+fun gegnerischerSchadenBerechnen(maxSchaden: Int): Int {
+    val range: IntRange = ((maxSchaden/2)..maxSchaden)
+    var listeSchaden: MutableList<Int> = mutableListOf(0)
+    for (zahl in range) {
+        listeSchaden.add(zahl)
+    }
+    return listeSchaden.random()
+}
+
+/**
+ * Überprüft die Lebenspunkte aller Gegner in der Liste und entfernt die besiegten Gegner.
+ * Die Funktion setzt die Lebenspunkte auf 0 für Gegner, die besiegt wurden, und gibt eine Nachricht aus.
+ *
+ * @param gegnerliste Die Liste der Gegner-Objekte, die überprüft werden sollen.
  *
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
@@ -248,58 +287,6 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
 }
 
 /**
- * Ermöglicht dem Spieler, einen Gegner aus der Liste der verfügbaren Gegner auszuwählen.
- * Falls nur ein Gegner vorhanden ist, wird dieser automatisch ausgewählt.
- *
- * @param held Das Held-Objekt, das einen Gegner auswählen wird.
- * @param gegnerliste Die Liste der verfügbaren Gegner.
- * @return Gibt das Gegner-Objekt zurück, das ausgewählt wurde.
- *
- * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
- */
-
-fun gegnerAuswahl(held: Held, gegnerliste: MutableList<Gegner>): Gegner {
-    return if (gegnerliste.size == 1) {
-        gegnerliste[0]
-    } else {
-        println("${held.name}, welchen Gegner willst Du in der nächsten Runde angreifen?")
-        var zaehler: Int = 0
-        for (gegner in gegnerliste) {
-            zaehler++
-            println("$zaehler. ${gegner.name}")
-        }
-        val eingabe: Int = sichereEingabe(zaehler) -1
-        gegnerliste[eingabe]
-    }
-}
-
-/**
- * Führt einen Spielzug für jedes Held-Objekt in der gegebenen Liste aus.
- * Wendet zuerst alle aktiven Buffs und Debuffs auf den Helden an, dann führt der Held einen Zug gegen einen zufällig ausgewählten Gegner aus.
- *
- * @param heldenliste Die Liste der Held-Objekte, für die ein Zug ausgeführt werden soll.
- * @param gegnerliste Die Liste der verfügbaren Gegner-Objekte.
- *
- * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
- */
-
-fun heldenzug(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>) {
-    for (held in heldenliste) {
-        // Überprüft ob Gegner tot sind und entfernt sie.
-        toteGegnerEntfernen(gegnerliste)
-        // Überprüft ob der Endgegner gefallen ist und beendet den Heldenzug
-        if (gegnerliste.isEmpty()) break
-        buffsDebuffsAnwenden(held)
-
-        val gegner: Gegner = gegnerAuswahl(held, gegnerliste)
-        var bedingung: Boolean = false
-        while(!bedingung && held.lebenspunkte() > 0 && gegnerliste.isNotEmpty()) {
-            bedingung = charakterMenue(held,gegner,heldenliste)
-        }
-    }
-}
-
-/**
  * Gibt eine textuelle Beschreibung der durchgeführten Aktion und des verursachten Schadens aus.
  * Führt außerdem die Schadensberechnung am gegnerischen Charakter durch.
  *
@@ -358,4 +345,27 @@ fun lebenspunkteAusgabe(gegnerliste: MutableList<Gegner>, heldenliste: List<Held
         }
     }
     println()
+}
+
+/**
+ * Mit Hilfe von ChatGPT erstellte Funktion, um Aktionen mit einer
+ * bestimmten Wahrscheinlichkeit auszuführen.
+ *
+ * @param wahrscheinlichkeiten Erwartet eine Liste mit Wahrscheinlichkeiten in Prozent
+ * @param aktionen Erwartet eine Liste mit Lambda-Funktionen.
+ */
+
+fun waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten: List<Int>, aktionen: List<() -> Unit>) {
+    if (wahrscheinlichkeiten.size != aktionen.size) throw IllegalArgumentException("Du hast eine ungleiche Anzahl von Wahrscheinlichkeiten zu Aktionen übergeben!")
+    if (wahrscheinlichkeiten.sum() != 100) throw IllegalArgumentException("Du hast Wahrscheinlichkeiten mit weniger oder mehr als 100% in Summe übergeben!")
+    val zufallszahl: Int = (1..100).random()
+    var sum: Int = 0
+
+    for (i in wahrscheinlichkeiten.indices) {
+        sum += wahrscheinlichkeiten[i]
+        if (zufallszahl < sum) {
+            aktionen[i].invoke()
+            break
+        }
+    }
 }

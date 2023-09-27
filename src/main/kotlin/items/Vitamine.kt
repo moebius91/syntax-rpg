@@ -8,6 +8,7 @@ class Vitamine: Item("Vitamine") {
         held.staerke += held.staerke /10
         held.intelligenz += held.intelligenz /10
         held.ausdauer += held.ausdauer /10
+        println("${held.name} seine Attribute sind um 10% gestiegen.\n")
         return true
     }
 

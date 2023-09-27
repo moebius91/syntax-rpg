@@ -7,7 +7,7 @@ class Heiltrank() : Item("Heiltrank") {
         if (held.lebenspunkte() < held.maxLebenspunkte()) {
             var heilung: Int = held.maxLebenspunkte() / 2
             heilung = held.heilungErfahren(heilung)
-            println("${held.name} wurde um $heilung Lebenspunkte geheilt.")
+            println("${held.name} wurde um $heilung Lebenspunkte geheilt.\n")
             return true
         }
         return false

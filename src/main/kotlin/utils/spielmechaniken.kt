@@ -162,7 +162,7 @@ fun heldenteamInstanziieren(): MutableList<Held> {
     repeat(3) {
         heldenliste.add(heldenInstanziieren())
     }
-
+    println()
     return heldenliste
 }
 
