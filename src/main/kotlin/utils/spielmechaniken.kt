@@ -176,6 +176,6 @@ fun heldenteamInstanziieren(): MutableList<Held> {
  * @author Funktion: Jan-Nikolas Othersen | KDOC: Generiert mit ChatGPT
  */
 
-fun endgegnerInstanziieren(): MutableList<Gegner> {
+fun endgegnerUndGegnerlisteInstanziieren(): MutableList<Gegner> {
     return mutableListOf(Drache())
 }

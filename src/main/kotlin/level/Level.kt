@@ -5,7 +5,7 @@ import charakter.helden.Held
 import utils.*
 
 open class Level(val heldenliste: MutableList<Held>) {
-    val gegnerliste: MutableList<Gegner> = endgegnerInstanziieren()
+    val gegnerliste: MutableList<Gegner> = endgegnerUndGegnerlisteInstanziieren()
 
     init {
         zufaelligeGegner()
