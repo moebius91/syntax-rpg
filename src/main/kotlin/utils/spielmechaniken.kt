@@ -163,6 +163,7 @@ fun heldenteamInstanziieren(): MutableList<Held> {
         heldenliste.add(heldenInstanziieren())
     }
     println()
+    heldenteamInventareAnlegen(heldenliste)
     return heldenliste
 }
 
