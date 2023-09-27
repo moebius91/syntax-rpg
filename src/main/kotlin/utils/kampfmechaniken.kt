@@ -7,8 +7,6 @@ import charakter.gegner.Ork
 import charakter.gegner.Schwaermer
 import charakter.helden.Held
 import charakter.helden.Krieger
-import charakterMenue
-import sichereEingabe
 import statuseffekte.debuffs.SchildVerlieren
 
 /**
