@@ -1,8 +1,10 @@
 package charakter.helden
 
 import charakter.gegner.Gegner
-import waffen.*
-import utils.*
+import utils.schadenAnwendenUndBerichten
+import utils.sichereEingabe
+import waffen.Stab
+import waffen.Streitkolben
 
 class Druide(name: String): Held(name) {
     // Klassenspezifische Attribute
@@ -59,7 +61,7 @@ class Druide(name: String): Held(name) {
         }
         val eingabe: Int = sichereEingabe(zaehler) -1
         val held: Held = heldenliste[eingabe]
-        val heilwert: Int = (held.maxLebenspunkte() /10..held.maxLebenspunkte() /2).random()
+        val heilwert: Int = (intelligenz * (held.maxLebenspunkte() /10..held.maxLebenspunkte() /2).random()) / (1..3).random()
         val heilung: Int = held.heilungErfahren(heilwert)
         println("${held.name} wurde um ${heilung} Lebenspunkte geheilt.\n")
         return true
