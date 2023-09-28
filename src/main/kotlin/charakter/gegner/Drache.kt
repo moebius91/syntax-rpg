@@ -76,7 +76,7 @@ open class Drache: Gegner() {
 
     fun heilen(){
         var alteLp: Int = this.lp
-        var geheilt: Int = (this.maxlp / 10) * (intelligenz / 10)
+        var geheilt: Int = (this.maxlp / 20) * (intelligenz / 10)  // 25-40% der maxLP werden geheilt
         this.lp += geheilt
         if (this.lp > this.maxlp) {
             this.lp = this.maxlp
