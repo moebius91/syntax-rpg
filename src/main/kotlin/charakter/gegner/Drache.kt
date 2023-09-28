@@ -3,7 +3,9 @@ package charakter.gegner
 import charakter.helden.Held
 import statuseffekte.buffs.SchildGebrauch
 import statuseffekte.debuffs.FluchDesDrachen
-import utils.*
+import utils.buffsVorAngriffPruefen
+import utils.gegnerischerSchadenBerechnen
+import utils.schadenAnwendenUndBerichten
 
 open class Drache: Gegner() {
     // Name
@@ -55,8 +57,7 @@ open class Drache: Gegner() {
     }
 
     fun fluchDesDrachen(heldenliste: List<Held>) {
-        val zahl: Int = (0..2).random()
-        val held: Held = heldenliste[zahl]
+        val held: Held = heldenliste.random()
         println("Der Fluch des Drachen trifft: ${held.name}.\n")
         held.debuffs.add(FluchDesDrachen(held))
     }
