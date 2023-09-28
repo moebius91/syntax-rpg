@@ -1,10 +1,7 @@
 package utils
 
 import charakter.Charakter
-import charakter.gegner.Drache
-import charakter.gegner.Gegner
-import charakter.gegner.Ork
-import charakter.gegner.Schwaermer
+import charakter.gegner.*
 import charakter.helden.Held
 import charakter.helden.Krieger
 import statuseffekte.debuffs.SchildVerlieren
@@ -252,7 +249,7 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
             waehleUndStarteAktionNachWahrscheinlichkeit(wahrscheinlichkeiten, aktionen)
         }
 
-        if (gegner is Ork) {
+        if (gegner is Ork || gegner is Goblin) {
             val wahrscheinlichkeiten: List<Int> = listOf(90,10)
             val aktionen: List<() -> Unit> = listOf(
                 {
