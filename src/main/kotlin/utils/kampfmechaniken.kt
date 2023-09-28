@@ -161,6 +161,8 @@ fun attackeGegner(gegnerliste: MutableList<Gegner>, heldenliste: List<Held>) {
     var schwaermerGefressen: Boolean = false
     // Iteriert durch die Liste der Gegner.
     for (gegner in gegnerliste) {
+        // Buffs und Debuffs werden angewendet
+        buffsDebuffsAnwenden(gegner)
         // Sorgt dafür, daß der Drache seine Aktionen ausführen kann
         if (gegner is Drache && gegner !is Schwaermer && gegner.lebenspunkte() > 0) {
             // Wählt die Attacke des Endgegners

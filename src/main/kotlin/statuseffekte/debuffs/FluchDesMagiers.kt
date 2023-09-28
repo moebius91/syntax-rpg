@@ -10,8 +10,10 @@ class FluchDesMagiers(gegner: Gegner): Debuff(gegner) {
 
     override fun schaden(charakter: Charakter) {
         if (!abgeklungen && charakter.lebenspunkte() > 0) {
-            charakter.schadenDirektNehmen(charakter.maxLebenspunkte() / 20)
+            val schaden: Int = charakter.schadenDirektNehmen(charakter.maxLebenspunkte() / 20)
+            println("${charakter.name} spürt ${this.name}. ($schaden)\n")
         } else {
+            println("${charakter.name} ist nicht mehr mit ${this.name} belegt.\n")
             abgeklungen = true
         }
     }
