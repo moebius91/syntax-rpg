@@ -2,7 +2,8 @@ package charakter.gegner
 
 import charakter.Charakter
 import charakter.helden.Held
-import utils.*
+import statuseffekte.buffs.Verteidigung
+import utils.schadenAnwendenUndBerichten
 
 open class Gegner(override var lp: Int = 100): Charakter() {
     // Name
@@ -18,6 +19,6 @@ open class Gegner(override var lp: Int = 100): Charakter() {
 
     open fun verteidigen() {
         println("${this.name} sieht aus, als würde es einen Angriff erwarten!\n")
-        // TODO("Buff hinzufügen der die Verteidigung kurzzeitig erhöht.")
+        this.buffs.add(Verteidigung(this))
     }
 }

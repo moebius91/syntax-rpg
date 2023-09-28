@@ -9,8 +9,14 @@ open class Buff(charakter: Charakter) {
     open var beschreibung: String = "Positive Beeinflussung Deines Charakters."
 
     open fun effekt(charakter: Charakter) {
+        benutzen()
+    }
+
+    open fun benutzen() {
 
     }
     open fun aufheben(charakter: Charakter) {
     }
+
+    open fun benutzen(charakter: Charakter) {}
 }

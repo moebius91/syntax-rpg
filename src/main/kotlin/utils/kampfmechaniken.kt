@@ -20,7 +20,7 @@ fun kampfrunde(heldenliste: List<Held>, gegnerliste: MutableList<Gegner>){
     heldenzug(heldenliste,gegnerliste)
     toteGegnerEntfernen(gegnerliste)
     attackeGegner(gegnerliste, heldenliste)
-    buffsDebuffsEntfernen(heldenliste)
+    buffsDebuffsEntfernen(heldenliste+gegnerliste)
 }
 
 /**
