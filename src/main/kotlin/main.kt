@@ -1,7 +1,8 @@
 
-import charakter.gegner.Gegner
 import charakter.helden.Held
-import utils.*
+import level.Level
+import utils.heldenteamInstanziieren
+import utils.spielBegruessung
 
 fun main() {
     // Spielbegrüßung
@@ -11,9 +12,7 @@ fun main() {
     // Der Spieler hat freie Auswahl über gewählte Klassen und Namen.
     val heldenliste: MutableList<Held> = heldenteamInstanziieren()
 
-    // Instanziiert den Endgegner
-    val gegnerliste: MutableList<Gegner> = endgegnerUndGegnerlisteInstanziieren()
-
-    // Startet das Spiel bis entweder der Endgegner oder die Helden tot sind.
-    spielrunde(heldenliste,gegnerliste)
+    // Levelaufruf Verlies + enthält Gegnergruppe
+    val level: Level = Level(heldenliste)
+    level.spielrunde()
 }

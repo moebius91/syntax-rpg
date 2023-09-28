@@ -16,6 +16,7 @@ open class Level(val heldenliste: MutableList<Held>) {
 
     protected open fun begruessung() {
         erstelleLauftext("Willkommen im Testlevel!\n")
+        gegnerAnzeigen()
     }
 
     protected open fun zufaelligeGegner() {
