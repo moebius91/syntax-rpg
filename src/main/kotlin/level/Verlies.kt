@@ -5,9 +5,10 @@ import charakter.gegner.Goblin
 import charakter.gegner.Ork
 import charakter.gegner.Schwaermer
 import charakter.helden.Held
-import utils.*
+import utils.erstelleLauftext
 
 class Verlies(heldenliste: MutableList<Held>): Level(heldenliste) {
+    var goblins: Boolean = false
 
     override fun begruessung() {
         erstelleLauftext("Willkommen im dunklen Verlies!\n")
@@ -23,23 +24,35 @@ class Verlies(heldenliste: MutableList<Held>): Level(heldenliste) {
         }
     }
 
-    override fun textAusgabeZwischenDenRunden(zaehler: Int) {
-        when (zaehler) {
-            1 -> {
-                println("Runde: $zaehler beginnt.")
+    override fun rundenbasierteLevelAktionen(zaehler: Int): Int {
+        when {
+            zaehler % 6 == 0 -> {
+                goblins()
             }
-            2 -> {
-                println("Runde: $zaehler beginnt.")
+            zaehler % 4 == 2 && zaehler % 3 == 1 -> {
+                deckeneinsturz()
             }
-            3 -> {
-                println("Runde: $zaehler beginnt.")
-            }
-            4 -> {
-                println("Runde: $zaehler beginnt.")
-            }
-            else -> {
-                println("Runde: $zaehler beginnt.")
-            }
+        }
+
+        return super.rundenbasierteLevelAktionen(zaehler)
+    }
+
+    fun goblins() {
+        gegnerliste.add(Goblin())
+        gegnerliste.add(Goblin())
+        println("Zwei Goblins kommen ${gegnerliste[0].name} zur Hilfe!\n")
+        goblins = true
+    }
+
+    fun deckeneinsturz() {
+        erstelleLauftext("Die Decke im Verlies bricht ein, alle Kontrahenten nehmen Schaden!")
+        for (gegner in gegnerliste) {
+            val schaden: Int = gegner.schadenNehmen((10..30).random())
+            println("${gegner.name} wird getroffen. ($schaden)")
+        }
+        for (held in heldenliste) {
+            val schaden: Int = held.schadenNehmen((10..30).random())
+            println("${held.name} wird getroffen. ($schaden)")
         }
     }
 }

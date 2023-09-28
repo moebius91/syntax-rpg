@@ -1,6 +1,8 @@
 package level
 
-import charakter.gegner.*
+import charakter.gegner.Gegner
+import charakter.gegner.Ork
+import charakter.gegner.Schwaermer
 import charakter.helden.Held
 import utils.*
 
@@ -44,13 +46,10 @@ open class Level(val heldenliste: MutableList<Held>) {
 
     fun spielrunde() {
         var heldenGewonnen: Boolean = false
-        var endgegner: Drache = gegnerliste[0] as Drache
-        var goblins: Boolean = false
-
+        var zaehler: Int = 1
         while (gegnerliste.isNotEmpty() && heldenliste.isNotEmpty()) {
-            var zaehler: Int = 1
-            textAusgabeZwischenDenRunden(zaehler)
-            zaehler++
+            // Rundenbasierte Aktionen abhängig vom Level
+            zaehler = rundenbasierteLevelAktionen(zaehler)
             kampfrunde(heldenliste, gegnerliste)
             ueberpruefeUndEntferneHeldGestorben(heldenliste)
 
@@ -65,36 +64,18 @@ open class Level(val heldenliste: MutableList<Held>) {
                 break
             }
 
-            if (endgegner.lebenspunkte() < ( endgegner.maxLebenspunkte() /2 ) && !goblins)  {
-                gegnerliste.add(Goblin())
-                gegnerliste.add(Goblin())
-                println("Zwei Goblins kommen ${endgegner.name} zur Hilfe!\n")
-                goblins = true
-            }
-
             lebenspunkteAusgabe(gegnerliste, heldenliste)
         }
 
         println(if (heldenGewonnen) "Die Helden haben gewonnen!" else "Spiel verloren.")
     }
 
-    protected open fun textAusgabeZwischenDenRunden(zaehler: Int) {
-        when (zaehler) {
-            1 -> {
-                println("Runde: $zaehler beginnt.")
-            }
-            2 -> {
-                println("Runde: $zaehler beginnt.")
-            }
-            3 -> {
-                println("Runde: $zaehler beginnt.")
-            }
-            4 -> {
-                println("Runde: $zaehler beginnt.")
-            }
-            else -> {
-                println("Runde: $zaehler beginnt.")
-            }
-        }
+    private fun rundenAusgabe(zaehler: Int): Int {
+        println("Runde $zaehler beginnt:")
+        return zaehler +1
+    }
+
+    protected open fun rundenbasierteLevelAktionen(zaehler: Int): Int{
+        return rundenAusgabe(zaehler)
     }
 }
