@@ -6,6 +6,7 @@ import charakter.gegner.Ork
 import charakter.gegner.Schwaermer
 import charakter.helden.Held
 import utils.erstelleLauftext
+import utils.sleep
 
 class Verlies(heldenliste: MutableList<Held>): Level(heldenliste) {
     var goblins: Boolean = false
@@ -45,14 +46,17 @@ class Verlies(heldenliste: MutableList<Held>): Level(heldenliste) {
     }
 
     fun deckeneinsturz() {
-        erstelleLauftext("Die Decke im Verlies bricht ein, alle Kontrahenten nehmen Schaden!")
+        erstelleLauftext("Die Decke im Verlies bricht ein, alle Kontrahenten nehmen Schaden!\n")
         for (gegner in gegnerliste) {
             val schaden: Int = gegner.schadenNehmen((10..30).random())
             println("${gegner.name} wird getroffen. ($schaden)")
+            sleep(500)
         }
         for (held in heldenliste) {
             val schaden: Int = held.schadenNehmen((10..30).random())
             println("${held.name} wird getroffen. ($schaden)")
+            sleep(500)
         }
+        println()
     }
 }
